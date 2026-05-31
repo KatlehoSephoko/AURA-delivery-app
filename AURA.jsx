@@ -1007,7 +1007,25 @@ export default function App() {
     setAiInput('');
     setIsAiLoading(true);
 
-    const apiKey = ""; 
+    const apiKey = process.env.REACT_APP_GEMINI_API_KEY || "";
+    const handleAISubmit = async (userText) => 
+    {if (!apiKey) 
+    {
+    console.error("Gemini API key is missing. Please configure a local .env file.");
+    return;}
+    
+    // Basic security: Stop inputs longer than 500 characters to prevent spam
+    if (userText.length > 500) {
+    alert("Input exceeds safety thresholds.");
+    return;
+    }
+    
+    // Strip out HTML code brackets to mitigate Cross-Site Scripting (XSS)
+    const sanitizedInput = userText.replace(/<[^>]*>/g, '');
+    
+    // Proceed with your standard Gemini API fetch call using `apiKey` and `sanitizedInput`...
+    };
+
     const systemPrompt = `
       You are the elite AI Clean Beauty Consultant representing 'AURA' - South Africa's most prestigious green-brand beauty delivery technology.
       We operate in Johannesburg, Pretoria, Cape Town, and Durban.
