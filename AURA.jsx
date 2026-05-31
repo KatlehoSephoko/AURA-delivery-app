@@ -1,6 +1,13 @@
 ```react
 import React, { useState, useEffect, useMemo } from 'react';
 
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabaseUrl = "YOUR_SUPABASE_URL"; 
+const supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY";
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 // ========================================================
 // 1. DYNAMIC SA LANGUAGES & LOCALIZATION DICTIONARY
 // ========================================================
