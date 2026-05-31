@@ -813,6 +813,33 @@ export default function App() {
     }
   };
 
+  const handleUserSignUp = async (email, password, fullName, selectedRole) => {
+  // Register the user in Supabase's secure Auth system
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  });
+
+  if (error) return console.error("Authentication Error:", error.message);
+
+  // Link their profile details into your custom public profiles table
+  if (data.user) {
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert([
+        { 
+          id: data.user.id, 
+          full_name: fullName, 
+          account_type: selectedRole 
+        }
+      ]);
+      
+    if (profileError) console.error("Profile Database Error:", profileError.message);
+    else alert("AURA Account Registered Successfully!");
+  }
+};
+
+
   const handleSignOut = () => {
     setCurrentUser(null);
     setCart([]);
@@ -920,6 +947,25 @@ export default function App() {
       setActiveTab('tracker');
     });
   };
+
+  const createNewCustomerOrder = async (currentUserId, mode, cost, campus = null) => {
+  const { data, error } = await supabase
+    .from('orders')
+    .insert([
+      { 
+        user_id: currentUserId, 
+        delivery_mode: mode, 
+        total_amount_zar: cost,
+        campus_name: campus,
+        order_status: 'Confirmed'
+      }
+    ])
+    .select(); // Returns the created data entry row instantly
+
+  if (error) console.error("Logistics Database Error:", error.message);
+  return data[0]; // Returns order record containing the database ID tracking tracking updates
+};
+
 
   const handleBookProfessional = (e) => {
     e.preventDefault();
