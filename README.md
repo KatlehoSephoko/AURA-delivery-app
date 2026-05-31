@@ -44,3 +44,13 @@ AURA is built following industry-standard OWASP security guidelines to protect u
 
 * **Environment Isolation:** Zero hardcoded secrets. All runtime credentials and Google Gemini keys are managed via isolated `.env` configurations, strictly managed by a comprehensive `.gitignore` protocol to prevent accidental credential leaks.
 * **Input Sanitization:** Implemented context-validation boundaries on the `Gemini-2.5-Flash` integration layer. User queries are validated to enforce character limits and strip executable code tags, eliminating malicious script execution and preventing system prompt overrides.
+
+## 💾 Database Architecture & State Management
+
+AURA utilizes an serverless backend ecosystem powered by **Supabase (PostgreSQL)**, seamlessly connecting data states into our single-file app engine.
+
+### 📊 Relational Database Relays
+* **Supabase Authentication Engine:** Manages secure user/driver data streams using cryptographic JWT tokens. User passwords are automatically salted and hashed natively within isolated schemas.
+* **`public.profiles` Table:** Links active system actors to specific permission modes (`consumer` or `driver`) via strict Foreign Key constraint binds.
+* **`public.orders` Table:** Central ledger tracking financial records (ZAR) and dynamic operational checkpoints (`Confirmed` → `Packing` → `Departed` → `Arrived`).
+* **Row-Level Security (RLS):** Hardened Postgres protection layers ensuring drivers can only update delivery coordinates, while consumers are restricted to querying their own transaction parameters.
