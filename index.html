@@ -1,476 +1,2056 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA 👑 — On-Demand Beauty Ecosystem</title>
-    
-    <!-- Core UI Engines & CDNs Loaded Directly into the Browser Memory -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <title>AURA — Premium South African Beauty Ecosystem</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Browser-Ready Standalone Supabase Script -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Custom Tailwind Configuration to Support Smooth Dark Mode Transitions -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    animation: {
-                        fadeIn: 'fadeIn 0.3s ease-out forward',
+                    colors: {
+                        cream: {
+                            50: '#FCFAF7',
+                            100: '#FAF7F2',
+                            200: '#F5F1E6',
+                            300: '#EAE3D2',
+                        },
+                        forest: {
+                            50: '#E8F0ED',
+                            100: '#D1E2D3',
+                            500: '#2A5C4E',
+                            800: '#154839',
+                            900: '#0D2C22',
+                            950: '#061711',
+                        },
+                        obsidian: {
+                            900: '#0A1110',
+                            950: '#050808'
+                        }
                     }
                 }
             }
         }
     </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar for premium editorial look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0D2C22;
+            border-radius: 10px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #A9CBB7;
+        }
+    </style>
 </head>
-<body class="m-0 p-0 antialiased selection:bg-pink-500 selection:text-white transition-colors duration-300">
+<body class="h-full bg-cream-100 text-slate-900 transition-colors duration-300 dark:bg-obsidian-900 dark:text-cream-100">
 
-    <!-- The physical mounting target for your React layout -->
-    <div id="root"></div>
+    <!-- ==========================================
+        TOP PROMOTIONAL NOTIFICATION STREAM
+    ========================================== -->
+    <div class="bg-forest-900 text-cream-100 py-2 px-4 text-center text-[11px] tracking-widest font-semibold border-b border-forest-950 flex justify-center items-center gap-2">
+        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping"></span>
+        <span id="ticker-text">AURA ECOSYSTEM: 60-Minute Urban Express & 2 AM Late-Night Campus Runs (Wits, UP, UJ, UNISA)</span>
+    </div>
 
-    <!-- Babel Compilation Script Block -->
-    <script type="text/babel">
-        // Access Supabase globally via the browser window bundle
-        const { createClient } = window.supabase;
-        
-        // Configuration Strings (Safe for public viewing on GitHub)
-        const supabaseUrl = "YOUR_SUPABASE_URL"; 
-        const supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY";
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    <!-- ==========================================
+        FLOATING SYSTEM TOAST/ALERTS
+    ========================================== -->
+    <div id="toast-notification" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-forest-900 border border-forest-100 text-cream-100 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none">
+        <span class="text-emerald-400">🌿</span>
+        <span id="toast-message" class="text-xs font-semibold uppercase tracking-wider">Product added successfully!</span>
+    </div>
 
-        // =====================================================================
-        // DICTIONARY LOOKUP TABLE FOR MULTI-LANGUAGE LOCALIZATION (SOUTH AFRICA)
-        // =====================================================================
-        const translations = {
-            en: {
-                welcome: "Welcome to South Africa's premier beauty delivery ecosystem.",
-                express: "Sixty60 Express & Campus Run",
-                subtext: "Experience lightning-fast delivery across major luxury hubs and midnight student residence access.",
-                identity: "Identity Portal",
-                register: "Register Account Sequence",
-                consumer: "Consumer View",
-                driver: "Driver View",
-                cartTitle: "Checkout Ledger",
-                cartEmpty: "Your delivery bag is empty.",
-                execute: "Execute Checkout Order ⚡",
-                campusTitle: "Midnight Residence Emergency Dispatch Active",
-                campusSub: "Servicing hyper-localized hubs up to 2:00 AM.",
-                selectCampus: "Select University Hub",
-                addBag: "Add Bag",
-                fleet: "AURA Central Fleet Tracker",
-                fleetSub: "Simulating live delivery routing parameters within South African hubs.",
-                noOrders: "No orders submitted to the cloud framework ledger infrastructure yet.",
-                advance: "Advance Logistics State 🚀",
-                completed: "Completed ✅",
-                successAuth: "AURA Account Registered Successfully!",
-                successOrder: "AURA Order Logged Safely! Switch to Driver View to track active fulfillment dispatch pipelines."
-            },
-            zu: {
-                welcome: "Siyakwamukela ohlelweni lokulethwa kobuhle oluhamba phambili eNingizimu Afrika.",
-                express: "Isithunywa Se-Sixty60 ne-Campus Run",
-                subtext: "Thola ukulethwa okusheshayo ezindaweni zokunethezeka nasekufundeni kwabafundi phakathi kwamabili.",
-                identity: "Ingosi Kamazisi",
-                register: "Bhalisa i-Akhawunti Manje",
-                consumer: "Okombukiso Womthengi",
-                driver: "Okombukiso Womshayeli",
-                cartTitle: "Incwadi Yokukhokha",
-                cartEmpty: "Isikhwama sakho sokulethwa singenalutho.",
-                execute: "Faka I-oda Manje ⚡",
-                campusTitle: "Ukuthunyelwa Kwasemhlabeni Phakathi Kwamabili Kusebenza",
-                campusSub: "Sikhonza amakhampasi kuze kukhale ihora lesibili ekuseni.",
-                selectCampus: "Khetha Inyuvesi Yakho",
-                addBag: "Faka Esikhwameni",
-                fleet: "I-AURA Central Fleet Tracker",
-                fleetSub: "Ukulingisa imizila yokulethwa bukhoma emikhambasini yaseNingizimu Afrika.",
-                noOrders: "Azikho ama-oda athunyelwe ohlelweni lwemininingwane okwamanje.",
-                advance: "Yisa Isimo Se-oda Phambili 🚀",
-                completed: "Kuqedile ✅",
-                successAuth: "I-akhawunti ye-AURA ibhaliswe ngempumelelo!",
-                successOrder: "I-oda le-AURA ligcinwe kahle! Shintshela kubuka komshayeli ukuze ulandelele."
-            },
-            st: {
-                welcome: "Re u amohela tsamaisong e etellang pele ea ho tlisa botle Afrika Boroa.",
-                express: "Sixty60 Express le Campus Run",
-                subtext: "Itemogele phano e lebelo la lehadima ho pholletsa le litsi tsa mabothobotho le phihlello ea phaposi ea baithuti har'a mp'a bosiu.",
-                identity: "Photale ea Boitsebiso",
-                register: "Ngolisa Akhaonto Hang-hang",
-                consumer: "Pono ea Bareki",
-                driver: "Pono ea Bakhanni",
-                cartTitle: "Buka ea ho Lefa",
-                cartEmpty: "Mokotla oa hau oa ho tlisa o shelehile.",
-                execute: "Phethela Taelo ea Hau ⚡",
-                campusTitle: "Phano ea Tšohanyetso Har'a Mp'a Bosiu e ea Sebetsa",
-                campusSub: "E sebeletsa litsi tsa baithuti ho fihlela ka hora ea bobeli hoseng.",
-                selectCampus: "Kgetha Univesithi ea Hau",
-                addBag: "Kenya Mokotleng",
-                fleet: "Setsebi sa ho Track Sefofane sa AURA",
-                fleetSub: "Ho etsa tšusumetso ea litsela tsa phano ka hare ho litsi tsa Afrika Boroa.",
-                noOrders: "Ha ho litaelo tse rometsoeng tsamaisong ea leru hajoale.",
-                advance: "Hatela Pele Boemo ba Phano 🚀",
-                completed: "E phethehile ✅",
-                successAuth: "Akhaonto ea AURA e ngolisitsoe ka katleho!",
-                successOrder: "Taelo ea AURA e bolokiloe hantle! Fetolela ho pono ea mokhanni ho e sala morao."
-            }
-        };
-
-        // =====================================================================
-        // MAIN APPLICATION COMPONENT ENGINE
-        // =====================================================================
-        function App() {
-            // Configuration & Theme States
-            const [viewMode, setViewMode] = React.useState('consumer');
-            const [isDarkMode, setIsDarkMode] = React.useState(true);
-            const [language, setLanguage] = React.useState('en');
+    <!-- ==========================================
+        ONBOARDING SIGN IN GATE / SPLASH SCREEN
+    ========================================== -->
+    <div id="gate-screen" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-4xl bg-cream-100 dark:bg-obsidian-900 rounded-3xl overflow-hidden shadow-2xl border border-forest-900/10 grid grid-cols-1 md:grid-cols-2">
             
-            // App Core Logic States
-            const [selectedDeliveryMode, setSelectedDeliveryMode] = React.useState('Sixty60 Express');
-            const [selectedCampus, setSelectedCampus] = React.useState('');
-            const [cart, setCart] = React.useState([]);
-            const [orderStatus, setOrderStatus] = React.useState('Confirmed');
-            const [activeOrderId, setActiveOrderId] = React.useState(null);
-            const [userSession, setUserSession] = React.useState(null);
-            
-            // Authentication Inputs
-            const [email, setEmail] = React.useState('');
-            const [password, setPassword] = React.useState('');
-            const [fullName, setFullName] = React.useState('');
+            <!-- Left Branding Column -->
+            <div class="bg-forest-900 p-8 md:p-12 text-cream-100 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-80 h-80 bg-emerald-950/40 rounded-full blur-3xl -z-10"></div>
+                
+                <div class="space-y-4">
+                    <div class="bg-cream-100/10 p-3 w-fit rounded-xl border border-cream-100/20">
+                        <span class="text-2xl">👑</span>
+                    </div>
+                    <h1 class="text-4xl font-serif font-black tracking-widest uppercase text-cream-100">AURA</h1>
+                    <p id="gate-hero-title" class="text-forest-100 text-sm leading-relaxed font-light">South Africa's premier clean beauty on-demand technology network.</p>
+                    <p id="gate-hero-desc" class="text-forest-100/80 text-xs leading-relaxed font-light">60-minute express courier deliveries, late-night student emergency logistics, and certified in-home beauty technician scheduling.</p>
+                </div>
 
-            // Quick Shortcut Pointer variable for Active Translations
-            const t = translations[language];
-
-            // Monitor and update the DOM element tags whenever system toggles dark mode state
-            React.useEffect(() => {
-                const rootElement = document.documentElement;
-                if (isDarkMode) {
-                    rootElement.classList.add('dark');
-                    document.body.style.backgroundColor = "#020617"; // slate-950 fallback
-                } else {
-                    rootElement.classList.remove('dark');
-                    document.body.style.backgroundColor = "#f8fafc"; // slate-50 fallback
-                }
-            }, [isDarkMode]);
-
-            // Premium Retail Product Arrays (ZAR Currency mapping indicators)
-            const products = [
-                { id: 1, name: "Premium HD Lace Wig (Straight, 24\")", price: 3500, type: "Luxury Concierge", image: "👑" },
-                { id: 2, name: "COSRX Advanced Snail Mucin 96 Essence", price: 420, type: "TikTok & K-Beauty Hub", image: "🐌" },
-                { id: 3, name: "Luxury Oud Perfume Oil Imp.", price: 1850, type: "Luxury Concierge", image: "✨" },
-                { id: 4, name: "Got2b Glued Blasting Freeze Spray", price: 180, type: "Campus Run", image: "🎓" },
-                { id: 5, name: "Pro Beauty Blender Makeup Sponge", price: 95, type: "Sixty60 Express", image: "💄" }
-            ];
-
-            const filteredProducts = React.useMemo(() => {
-                return products.filter(p => p.type === selectedDeliveryMode);
-            }, [selectedDeliveryMode]);
-
-            const cartTotal = React.useMemo(() => {
-                return cart.reduce((total, item) => total + item.price, 0);
-            }, [cart]);
-
-            // Database Relational API Method bindings
-            const handleUserSignUp = async (e) => {
-                e.preventDefault();
-                if (!email || !password || !fullName) return alert("Please fill out all registration fields!");
-
-                const { data, error } = await supabase.auth.signUp({ email, password });
-                if (error) return alert("Authentication Error: " + error.message);
-
-                if (data.user) {
-                    const { error: profileError } = await supabase
-                        .from('profiles')
-                        .insert([{ id: data.user.id, full_name: fullName, account_type: viewMode }]);
-                    
-                    if (profileError) {
-                        console.error("Database Trace Error: ", profileError.message);
-                    } else {
-                        setUserSession(data.user);
-                        alert(`${t.successAuth} (${viewMode})`);
-                    }
-                }
-            };
-
-            const handleCheckout = async () => {
-                if (cart.length === 0) return alert("Your cart is empty!");
-                const fallbackUserId = "00000000-0000-0000-0000-000000000000";
-                const currentUserId = userSession ? userSession.id : fallbackUserId;
-
-                const { data, error } = await supabase
-                    .from('orders')
-                    .insert([{ 
-                        user_id: currentUserId, 
-                        delivery_mode: selectedDeliveryMode, 
-                        total_amount_zar: cartTotal,
-                        campus_name: selectedDeliveryMode === 'Campus Run' ? selectedCampus : null,
-                        order_status: 'Confirmed'
-                    }])
-                    .select();
-
-                if (error) {
-                    console.error("Supabase Database Connect Error: ", error.message);
-                    setActiveOrderId("SIM-" + Math.floor(1000 + Math.random() * 9000));
-                } else if (data && data[0]) {
-                    setActiveOrderId(data[0].id);
-                }
-
-                setOrderStatus('Confirmed');
-                setCart([]);
-                alert(t.successOrder);
-            };
-
-            const advanceOrderStatus = () => {
-                const stages = ['Confirmed', 'Packing', 'Departed', 'Arrived'];
-                const currentIndex = stages.indexOf(orderStatus);
-                if (currentIndex < stages.length - 1) {
-                    setOrderStatus(stages[currentIndex + 1]);
-                }
-            };
-
-            return (
-                <div class="min-h-screen transition-colors duration-300 bg-gradient-to-br from-slate-50 via-slate-100 to-pink-50 dark:from-slate-950 dark:via-slate-900 dark:to-purple-950 text-slate-800 dark:text-slate-100 font-sans">
-                    
-                    {/* TOP ACCELERATED ACCESS AND UTILITIES TOOLBAR BANNER */}
-                    <div class="bg-slate-200/60 dark:bg-slate-950/80 border-b border-slate-300 dark:border-slate-800 px-6 py-2 flex justify-end items-center gap-4 text-xs font-bold">
-                        
-                        <!-- Dynamic Language Localization Select Matrix -->
-                        <div class="flex items-center gap-1.5">
-                            <span class="opacity-70">🌐</span>
-                            <select 
-                                value={language} 
-                                onChange={(e) => setLanguage(e.target.value)}
-                                class="bg-transparent border-none text-slate-700 dark:text-slate-300 font-bold focus:outline-none cursor-pointer"
-                            >
-                                <option value="en" class="text-slate-900">English</option>
-                                <option value="zu" class="text-slate-900">isiZulu</option>
-                                <option value="st" class="text-slate-900">Sesotho</option>
-                            </select>
-                        </div>
-                        
-                        <span class="text-slate-400 dark:text-slate-700">|</span>
-
-                        <!-- Dynamic Color Theme Environment Toggler Switch -->
-                        <button 
-                            onClick={() => setIsDarkMode(!isDarkMode)}
-                            class="flex items-center gap-1.5 hover:text-pink-500 transition-colors"
-                        >
-                            <span>{isDarkMode ? '☀️ Light' : '🌙 Dark'}</span>
+                <!-- Fast Controllers in Gate -->
+                <div class="space-y-4 pt-8">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-forest-100">Setup Ecosystem Prefixes</span>
+                    <div class="flex flex-wrap gap-2">
+                        <select id="gate-lang-selector" onchange="changeLanguage(this.value)" class="bg-forest-950 border border-cream-100/20 text-cream-100 rounded-xl px-3 py-2 text-xs focus:outline-none">
+                            <!-- Languages populated dynamically -->
+                        </select>
+                        <button onclick="toggleTheme()" class="bg-cream-100/10 hover:bg-cream-100/20 border border-cream-100/20 text-cream-100 px-3 py-2 rounded-xl text-xs flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-half-stroke"></i> <span class="theme-btn-text">Theme</span>
                         </button>
                     </div>
 
-                    {/* MAIN HEADER DASHBOARD RECTANGLE STICKY STRIP */}
-                    <header class="border-b border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-sm dark:shadow-none">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">👑</span>
-                            <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-pink-500 to-purple-500 dark:from-pink-400 dark:to-purple-400 bg-clip-text text-transparent">AURA</h1>
-                        </div>
-                        <div class="flex gap-2">
-                            <button 
-                                onClick={() => setViewMode('consumer')}
-                                class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === 'consumer' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-700'}`}
-                            >
-                                {t.consumer}
-                            </button>
-                            <button 
-                                onClick={() => setViewMode('driver')}
-                                class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === 'driver' ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-700'}`}
-                            >
-                                {t.driver}
-                            </button>
-                        </div>
-                    </header>
-
-                    {/* MAIN TWO-COLUMN APPLICATION CONTAINER MESH GRID */}
-                    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        
-                        {/* PORTAL VIEW MODULE DEPLOYMENT COLUMNS */}
-                        <div class="lg:col-span-2 space-y-6">
-                            
-                            {/* Unified User/Driver Identity Registration Module Container */}
-                            <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur shadow-sm">
-                                <h3 class="text-sm uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-green-400"></span> {t.identity}
-                                </h3>
-                                {userSession ? (
-                                    <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-sm text-green-600 dark:text-green-400 font-medium">
-                                        Active Cloud Session Authenticated! Profile Token Signature linked to: <span class="font-bold underline">{email}</span>
-                                    </div>
-                                ) : (
-                                    <form onSubmit={handleUserSignUp} class="space-y-3">
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                            <input type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} class="bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-2.5 text-sm focus:outline-none focus:border-pink-500 text-slate-900 dark:text-white" />
-                                            <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} class="bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-2.5 text-sm focus:outline-none focus:border-pink-500 text-slate-900 dark:text-white" />
-                                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} class="bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-2.5 text-sm focus:outline-none focus:border-pink-500 text-slate-900 dark:text-white" />
-                                        </div>
-                                        <button type="submit" class="w-full bg-slate-800 hover:bg-pink-600 dark:bg-slate-800 dark:hover:bg-pink-600 text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all shadow-md">
-                                            {t.register}
-                                        </button>
-                                    </form>
-                                )}
-                            </div>
-
-                            {/* DYNAMIC CONSUMER MARKET HUB ROUTER PANEL */}
-                            {viewMode === 'consumer' ? (
-                                <div class="space-y-6">
-                                    {/* Sub-Market Dynamic Navigation Menu Tabs */}
-                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-200/50 dark:bg-slate-950/80 p-1.5 rounded-2xl border border-slate-300 dark:border-slate-800">
-                                        {['Sixty60 Express', 'Campus Run', 'Luxury Concierge', 'TikTok & K-Beauty Hub'].map((mode) => (
-                                            <button 
-                                                key={mode}
-                                                onClick={() => { setSelectedDeliveryMode(mode); setCart([]); }}
-                                                class={`py-2 px-3 rounded-xl text-xs font-bold tracking-tight transition-all ${selectedDeliveryMode === mode ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
-                                            >
-                                                {mode}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {/* University Localizer Selection Engine Block */}
-                                    {selectedDeliveryMode === 'Campus Run' && (
-                                        <div class="p-5 rounded-2xl border border-pink-200 dark:border-pink-900/30 bg-pink-500/5 dark:bg-pink-950/10 backdrop-blur flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
-                                            <div>
-                                                <h4 class="font-bold text-pink-600 dark:text-pink-400 text-sm">🎓 {t.campusTitle}</h4>
-                                                <p class="text-xs text-slate-500 dark:text-slate-400">{t.campusSub}</p>
-                                            </div>
-                                            <select 
-                                                value={selectedCampus}
-                                                onChange={(e) => setSelectedCampus(e.target.value)}
-                                                class="bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs rounded-xl p-2 text-slate-800 dark:text-pink-300 focus:outline-none focus:border-pink-500 font-bold shadow-sm"
-                                            >
-                                                <option value="">-- {t.selectCampus} --</option>
-                                                <option value="Wits Main Campus">Wits University (Johannesburg)</option>
-                                                <option value="UP Hatfield">University of Pretoria (Hatfield)</option>
-                                                <option value="UJ Kingsway">University of Johannesburg (APK)</option>
-                                            </select>
-                                        </div>
-                                    )}
-
-                                    {/* Dynamic Catalog Portfolio Display Grids */}
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {filteredProducts.map(product => (
-                                            <div key={product.id} class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/20 backdrop-blur flex gap-4 items-center justify-between hover:border-pink-400 dark:hover:border-slate-700 shadow-sm transition-all">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="text-3xl bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800">{product.image}</div>
-                                                    <div>
-                                                        <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200">{product.name}</h4>
-                                                        <p class="text-pink-600 dark:text-pink-400 font-black text-sm mt-0.5">R {product.price.toLocaleString('en-ZA')}</p>
-                                                    </div>
-                                                </div>
-                                                <button 
-                                                    onClick={() => setCart([...cart, product])}
-                                                    class="bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-md shadow-pink-500/10 transition-all"
-                                                >
-                                                    {t.addBag}
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ) : (
-                                /* REAL-TIME SIMULATED DRIVER DISPATCH OPERATIONS TRACKER CORE PANEL */
-                                <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur space-y-6 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <h2 class="text-lg font-black tracking-wide text-purple-600 dark:text-purple-400">🎛️ {t.fleet}</h2>
-                                            <p class="text-xs text-slate-500 dark:text-slate-400">{t.fleetSub}</p>
-                                        </div>
-                                        {activeOrderId && (
-                                            <span class="text-[10px] font-mono px-2.5 py-1 bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-full font-bold">
-                                                ID: {activeOrderId}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {activeOrderId ? (
-                                        <div class="space-y-6">
-                                            {/* Visual Progress Checkpoint State Tracker Layout Bar */}
-                                            <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                                                {['Confirmed', 'Packing', 'Departed', 'Arrived'].map((stage, i, arr) => {
-                                                    const active = arr.indexOf(orderStatus) >= i;
-                                                    return (
-                                                        <div key={stage} class={`p-2.5 rounded-xl border font-bold transition-all ${active ? 'bg-purple-600 dark:bg-purple-950 border-purple-500 text-white dark:text-purple-300 shadow-md' : 'bg-slate-100 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600'}`}>
-                                                            <div class="mb-1 text-xs">{i + 1}</div>
-                                                            <div class="text-[9px] uppercase tracking-wider font-extrabold">{stage}</div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-
-                                            <div class="p-4 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-between items-center shadow-sm">
-                                                <div class="text-xs space-y-1">
-                                                    <p class="text-slate-500 dark:text-slate-400">Logistics Parameter: <span class="text-slate-800 dark:text-slate-200 font-bold">{selectedDeliveryMode}</span></p>
-                                                    {selectedCampus && <p class="text-slate-500 dark:text-slate-400">Target Coordinates: <span class="text-pink-600 dark:text-pink-400 font-bold">{selectedCampus}</span></p>}
-                                                </div>
-                                                <button 
-                                                    onClick={advanceOrderStatus}
-                                                    disabled={orderStatus === 'Arrived'}
-                                                    class="bg-purple-600 hover:bg-purple-500 disabled:bg-slate-300 dark:disabled:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md"
-                                                >
-                                                    {orderStatus === 'Arrived' ? t.completed : t.advance}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div class="p-10 text-center border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl text-slate-400 dark:text-slate-500 text-xs font-medium">
-                                            {t.noOrders}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* RIGHT REGION COMPONENT: FINANCIAL CHECKOUT LEDGER COLUMN */}
-                        <div class="space-y-6">
-                            <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 backdrop-blur flex flex-col justify-between min-h-[380px] shadow-sm">
-                                <div>
-                                    <h3 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4 flex items-center justify-between">
-                                        <span>🛍️ {t.cartTitle}</span>
-                                        <span class="text-xs font-mono font-normal text-slate-400">({cart.length})</span>
-                                    </h3>
-                                    
-                                    {cart.length === 0 ? (
-                                        <div class="text-center py-14 text-slate-400 dark:text-slate-600 text-xs border border-dashed border-slate-200 dark:border-slate-800 rounded-xl font-medium">
-                                            {t.cartEmpty}
-                                        </div>
-                                    ) : (
-                                        <div class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-                                            {cart.map((item, index) => (
-                                                <div key={index} class="p-2.5 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs shadow-sm">
-                                                    <span class="text-slate-700 dark:text-slate-300 font-medium truncate max-w-[150px]">{item.name}</span>
-                                                    <span class="text-pink-600 dark:text-pink-400 font-black whitespace-nowrap">R {item.price}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div class="pt-4 border-t border-slate-200 dark:border-slate-800 mt-6 space-y-4">
-                                    <div class="flex justify-between items-baseline">
-                                        <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Total ZAR:</span>
-                                        <span class="text-2xl font-black text-pink-600 dark:text-pink-400 tracking-tight">R {cartTotal.toLocaleString('en-ZA')}</span>
-                                    </div>
-                                    <button 
-                                        onClick={handleCheckout}
-                                        disabled={cart.length === 0}
-                                        class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 disabled:from-slate-200 disabled:to-slate-200 dark:disabled:from-slate-800 dark:disabled:to-slate-800 text-white text-xs font-black uppercase tracking-wider py-3 rounded-xl transition-all shadow-lg shadow-pink-500/10"
-                                    >
-                                        {t.execute}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </main>
+                    <div class="space-y-2 pt-2">
+                      <span class="text-[10px] font-black uppercase tracking-widest text-forest-100">Ecosystem Quick-Logins</span>
+                      <div class="grid grid-cols-2 gap-2 text-xs">
+                          <button onclick="simulateAuthPreset('consumer')" class="bg-cream-100/10 hover:bg-cream-100/20 border border-[#FAF7F2]/20 py-2.5 px-3 rounded-xl transition-all font-semibold">
+                              Client Demo 💅🏽
+                          </button>
+                          <button onclick="simulateAuthPreset('partner')" class="bg-cream-100/10 hover:bg-cream-100/20 border border-[#FAF7F2]/20 py-2.5 px-3 rounded-xl transition-all font-semibold">
+                              Driver / Pro Demo 🛵
+                          </button>
+                      </div>
+                    </div>
                 </div>
-            );
+
+                <p class="text-[10px] text-forest-100/50 font-medium">© 2026 AURA Inc. Johannesburg, Pretoria, Cape Town, Durban.</p>
+            </div>
+
+            <!-- Right Registration Form Column -->
+            <div class="p-8 md:p-12 flex flex-col justify-between">
+                <div class="space-y-1">
+                    <h2 id="gate-form-title" class="text-2xl font-bold tracking-tight">Access Ecosystem</h2>
+                    <p id="gate-form-desc" class="text-xs text-slate-500">Sign in to unlock order placements, tracking, and stylist appointments.</p>
+                </div>
+
+                <div class="my-6">
+                    <div class="flex border-b border-slate-200 text-xs">
+                        <button onclick="switchAuthTab('login')" id="tab-login-btn" class="flex-1 pb-2 font-black uppercase tracking-wider text-forest-900 border-b-2 border-forest-900">
+                            Sign In
+                        </button>
+                        <button onclick="switchAuthTab('signup')" id="tab-signup-btn" class="flex-1 pb-2 font-black uppercase tracking-wider text-slate-400">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <form id="auth-gate-form" onsubmit="handleAuthGateSubmit(event)" class="space-y-4 pt-4 text-xs">
+                        <div id="signup-field-name" class="hidden">
+                            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Your Full Name</label>
+                            <input type="text" id="auth-input-name" placeholder="e.g. Naledi Kunene" class="w-full bg-cream-50 dark:bg-forest-950 border border-slate-300 dark:border-slate-800 rounded-xl p-3 focus:outline-none focus:border-forest-900">
+                        </div>
+                        <div>
+                          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Email Address</label>
+                          <input type="email" id="auth-input-email" placeholder="you@example.co.za" required class="w-full bg-cream-50 dark:bg-forest-950 border border-slate-300 dark:border-slate-800 rounded-xl p-3 focus:outline-none focus:border-forest-900">
+                        </div>
+                        <div>
+                          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Password</label>
+                          <input type="password" id="auth-input-password" placeholder="••••••••" required class="w-full bg-cream-50 dark:bg-forest-950 border border-slate-300 dark:border-slate-800 rounded-xl p-3 focus:outline-none focus:border-forest-900">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold uppercase text-slate-400">Register Profile Role:</label>
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <button type="button" id="role-client-btn" onclick="selectOnboardingRole('consumer')" class="p-2.5 rounded-xl border font-semibold text-center transition-all border-forest-900 bg-forest-100 text-forest-900">
+                                    Client / Guest 💅🏽
+                                </button>
+                                <button type="button" id="role-driver-btn" onclick="selectOnboardingRole('partner')" class="p-2.5 rounded-xl border font-semibold text-center transition-all border-slate-300 text-slate-500">
+                                    Driver / Pro 🛵
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="gate-submit-btn" class="w-full bg-forest-900 hover:bg-forest-800 text-cream-100 font-black py-3 rounded-xl uppercase tracking-widest transition-all">
+                            Access Ecosystem
+                        </button>
+                    </form>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="continueAsGuest()" class="text-xs text-forest-900 dark:text-cream-300 font-bold underline hover:text-black transition-all">
+                        Continue as Guest (Browse Only) →
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==========================================
+        GUEST PROTECTION RESTRICTION ALERTS
+    ========================================== -->
+    <div id="guest-alert-strip" class="bg-forest-100 dark:bg-forest-950 text-forest-900 dark:text-cream-200 border-b border-forest-900/10 py-2.5 px-4 text-xs font-bold transition-all">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 flex-wrap">
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-info text-forest-900 dark:text-cream-100"></i>
+                <span id="guest-alert-msg">Browsing in Guest Mode. Sign up or log in to add items to bag or book stylings.</span>
+            </span>
+            <button onclick="openAuthModal()" class="bg-forest-900 text-cream-100 px-3 py-1 rounded-lg text-[10px] uppercase font-black tracking-widest hover:bg-forest-800">
+                Sign In Now
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+        APP SITE HEADER
+    ========================================== -->
+    <header class="sticky top-0 z-40 bg-cream-100/90 dark:bg-obsidian-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 py-4 px-4 transition-colors">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Logo Brand Accent -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateToTab('home')">
+                <div class="bg-forest-900 p-2.5 rounded-xl text-white shadow-md">
+                    <span class="text-xl">🌿</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-serif font-black tracking-widest text-forest-900 dark:text-cream-100">AURA</h1>
+                    <p id="header-subtitle" class="text-[9px] font-black uppercase tracking-widest text-slate-500">Premium Consumer & Driver Ecosystem</p>
+                </div>
+            </div>
+
+            <!-- Header Quick Preferences Controller -->
+            <div class="flex items-center gap-3 bg-cream-200/50 dark:bg-forest-950/40 p-1.5 rounded-xl border border-slate-300/40">
+                <div class="flex items-center gap-1.5 text-xs">
+                    <span>🇿🇦</span>
+                    <select id="header-lang-selector" onchange="changeLanguage(this.value)" class="bg-transparent font-semibold focus:outline-none cursor-pointer border-none dark:text-cream-100">
+                        <!-- Languages populated dynamically -->
+                    </select>
+                </div>
+                <div class="h-4 w-[1px] bg-slate-300"></div>
+                <button onclick="toggleTheme()" class="flex items-center gap-1 p-1 px-2.5 rounded-lg bg-forest-900/10 hover:bg-forest-900/20 text-xs font-bold dark:text-cream-100">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                    <span class="hidden sm:inline theme-btn-text">Theme</span>
+                </button>
+            </div>
+
+            <!-- Active App Mode Switcher -->
+            <div class="flex bg-cream-200 dark:bg-forest-950/60 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs w-full md:w-auto">
+                <button id="role-switch-consumer" onclick="switchAppRole('consumer')" class="flex-1 md:flex-none px-4 py-1.5 rounded-lg font-black transition-all bg-forest-900 text-cream-100">
+                    Consumer App
+                </button>
+                <button id="role-switch-partner" onclick="switchAppRole('partner')" class="flex-1 md:flex-none px-4 py-1.5 rounded-lg font-black transition-all text-slate-500 hover:text-slate-800 dark:hover:text-cream-100">
+                    Partner / Driver Hub 🛵
+                </button>
+            </div>
+
+            <!-- Consumer Tabs (Shown when activeAppRole === 'consumer') -->
+            <nav id="consumer-nav-bar" class="flex items-center gap-1 bg-slate-100 dark:bg-forest-950/80 p-1 rounded-xl border border-slate-200 dark:border-slate-800 w-full md:w-auto justify-around">
+                <button id="tab-btn-home" onclick="navigateToTab('home')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all bg-white text-forest-900 dark:bg-forest-900 dark:text-cream-100 shadow-sm">Home</button>
+                <button id="tab-btn-shop" onclick="navigateToTab('shop')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800">Shop Sixty60</button>
+                <button id="tab-btn-bookings" onclick="navigateToTab('bookings')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800">Book Pros</button>
+                <button id="tab-btn-ai" onclick="navigateToTab('ai')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800">✨ AI Match</button>
+                <button id="tab-btn-tracker" onclick="navigateToTab('tracker')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800">Tracker</button>
+            </nav>
+
+            <!-- User Auth Profile block -->
+            <div id="header-auth-block" class="flex items-center gap-3">
+                <button onclick="openAuthModal()" class="bg-forest-900 hover:bg-forest-800 text-cream-100 font-black text-xs px-4 py-2.5 rounded-xl uppercase tracking-widest transition-all">
+                    Sign In
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ==========================================
+        MAIN ECOSYSTEM WRAPPER
+    ========================================== -->
+    <main class="max-w-7xl mx-auto w-full p-4 flex-grow">
+        
+        <!-- ==========================================
+            VIEW 1: HOME PAGE
+        ========================================== -->
+        <section id="view-home" class="space-y-8 py-4">
+            
+            <!-- Immersive Hero -->
+            <div class="relative rounded-3xl overflow-hidden bg-forest-900 text-cream-100 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-slate-900 shadow-xl">
+                <div class="absolute inset-0 bg-radial-gradient(ellipse_at_top_right, #061711, #0D2C22, #050808) opacity-90 -z-10"></div>
+                
+                <div class="max-w-xl space-y-4">
+                    <span class="bg-cream-100/10 border border-cream-100/20 text-forest-100 text-[9px] font-black tracking-widest uppercase px-3 py-1 rounded-full">
+                        AURA PREMIUM LOGISTICS
+                    </span>
+                    <h2 id="hero-title" class="text-4xl md:text-5xl font-serif font-black tracking-tight leading-tight">Crafting clean beauty on-demand across SA</h2>
+                    <p id="hero-desc" class="text-forest-100 text-xs md:text-sm leading-relaxed font-light">Seamless Sixty60 style deliveries for premium beauty products, combined with late-night campus support, and on-demand schedules with South Africa's vetted cosmetics artists.</p>
+                    
+                    <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-grow">
+                            <input type="text" id="home-search" placeholder="Search products, wig essentials..." class="w-full bg-cream-100/10 border border-cream-100/20 text-cream-100 rounded-xl py-3 px-4 pl-10 text-xs focus:outline-none focus:border-cream-100">
+                            <span class="absolute left-3.5 top-3.5 text-slate-400">🔍</span>
+                        </div>
+                        <button onclick="navigateToTab('shop')" class="bg-cream-100 text-forest-900 font-black text-xs uppercase tracking-widest px-6 py-3 rounded-xl hover:bg-cream-200 transition-all">Explore Catalogue</button>
+                    </div>
+                </div>
+
+                <!-- Fast Categories Preview cards -->
+                <div class="grid grid-cols-2 gap-3 max-w-sm w-full md:w-auto">
+                    <div onclick="selectCategory('Sixty60 Express')" class="bg-cream-100/5 hover:bg-cream-100/10 p-5 rounded-2xl border border-cream-100/10 text-center cursor-pointer transition-all">
+                        <span class="text-3xl block mb-2">🚀</span>
+                        <h4 class="font-bold text-xs">Sixty60 Express</h4>
+                        <p class="text-[9px] text-forest-100 mt-1">60-minute delivery</p>
+                    </div>
+                    <div onclick="selectCategory('Campus Run')" class="bg-cream-100/5 hover:bg-cream-100/10 p-5 rounded-2xl border border-cream-100/10 text-center cursor-pointer transition-all">
+                        <span class="text-3xl block mb-2">🎓</span>
+                        <h4 class="font-bold text-xs">Campus Run</h4>
+                        <p class="text-[9px] text-forest-100 mt-1">Midnight emergencies</p>
+                    </div>
+                    <div onclick="navigateToTab('bookings')" class="bg-cream-100/5 hover:bg-cream-100/10 p-5 rounded-2xl border border-cream-100/10 text-center cursor-pointer transition-all">
+                        <span class="text-3xl block mb-2">💅🏽</span>
+                        <h4 class="font-bold text-xs">Book Pros</h4>
+                        <p class="text-[9px] text-forest-100 mt-1">Vetted Stylists & MUAs</p>
+                    </div>
+                    <div onclick="navigateToTab('ai')" class="bg-cream-100/5 hover:bg-cream-100/10 p-5 rounded-2xl border border-cream-100/10 text-center cursor-pointer transition-all">
+                        <span class="text-3xl block mb-2">✨</span>
+                        <h4 class="font-bold text-xs">AI Matcher</h4>
+                        <p class="text-[9px] text-forest-100 mt-1">Bespoke formulations</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Campus Emergency Logistics banner -->
+            <div class="bg-cream-200 dark:bg-forest-950/60 rounded-2xl p-6 border border-slate-300 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 transition-colors">
+                <div class="flex items-center gap-4">
+                    <span class="text-4xl bg-forest-900 text-cream-100 w-12 h-12 rounded-xl flex items-center justify-center">🎓</span>
+                    <div>
+                        <h3 class="font-bold text-base text-forest-900 dark:text-cream-100">Wits, UP, UJ, UNISA Midnight Logistics</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-xs mt-1">
+                            Run out of Got2B lace glue or edge control before an important morning event? We run quick scooter drops straight to residences up to 2:00 AM.
+                        </p>
+                    </div>
+                </div>
+                <button onclick="activateCampusRun()" class="bg-forest-900 hover:bg-forest-800 text-cream-100 text-xs font-black px-5 py-3 rounded-xl uppercase tracking-wider whitespace-nowrap transition-all shadow-md">
+                    Campus Mode 🎓
+                </button>
+            </div>
+
+            <!-- Featured trending items -->
+            <div class="space-y-6">
+                <div class="flex items-end justify-between">
+                    <div>
+                        <span class="text-forest-900 dark:text-cream-300 font-black text-[9px] tracking-widest uppercase">Hot Collections</span>
+                        <h3 class="text-2xl font-serif font-bold text-forest-900 dark:text-cream-100">K-Beauty & TikTok Viral Favorites</h3>
+                    </div>
+                    <button onclick="selectCategory('TikTok & K-Beauty')" class="text-forest-900 dark:text-cream-300 text-xs font-black underline hover:text-slate-900">View All →</button>
+                </div>
+
+                <div id="featured-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Featured products populated dynamically by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Stylist Quick Introduction banner -->
+            <div class="space-y-6 pt-4">
+                <div class="flex items-end justify-between">
+                    <div>
+                        <span class="text-forest-900 dark:text-cream-300 font-black text-[9px] tracking-widest uppercase">AURA Go Scheduling</span>
+                        <h3 class="text-2xl font-serif font-bold text-forest-900 dark:text-cream-100">Vetted Local Stylists & Techs</h3>
+                    </div>
+                    <button onclick="navigateToTab('bookings')" class="text-forest-900 dark:text-cream-300 text-xs font-black underline hover:text-slate-900">View All Professionals →</button>
+                </div>
+
+                <div id="featured-pros-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Featured Beauty Technicians populated dynamically -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+            VIEW 2: SHOPPING EXPRESS
+        ========================================== -->
+        <section id="view-shop" class="hidden space-y-6 animate-fadeIn">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-2xl font-serif font-black text-forest-900 dark:text-cream-100">Sixty60 Express Catalogue</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Browse, filter, and request deliveries. (Auth required during checkout).</p>
+                </div>
+
+                <!-- Category Filters selector list -->
+                <div class="flex flex-wrap gap-2" id="categories-filter-list">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+
+            <!-- Delivery Logistics Settings controls -->
+            <div class="bg-cream-200 dark:bg-forest-950/60 rounded-xl p-4 border border-slate-300 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 transition-colors">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-xs font-black text-slate-500 uppercase">Delivery Profile:</span>
+                    <button id="delivery-toggle-express" onclick="toggleDeliveryType('express')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-forest-900 text-cream-100 border-forest-900">
+                        🚀 Sixty60 City Courier
+                    </button>
+                    <button id="delivery-toggle-campus" onclick="toggleDeliveryType('campus')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-500 border-slate-200">
+                        🎓 Student Campus Run
+                    </button>
+                </div>
+
+                <!-- Contextual inputs based on logistics -->
+                <div id="delivery-inputs-express" class="flex items-center gap-2 text-xs w-full md:w-auto">
+                    <span class="text-slate-500">Destination:</span>
+                    <select id="selected-region" class="bg-white border border-slate-200 rounded p-1 text-slate-800">
+                        <!-- Populated dynamically -->
+                    </select>
+                    <input type="text" id="street-address" value="8 Keyes Avenue, Rosebank" placeholder="Street / Complex..." class="bg-white text-slate-800 border border-slate-200 rounded p-1 flex-grow">
+                </div>
+
+                <div id="delivery-inputs-campus" class="hidden flex items-center gap-2 text-xs w-full md:w-auto">
+                    <span class="text-slate-500">Residence Hub:</span>
+                    <select id="selected-campus" class="bg-white border border-slate-200 rounded p-1 text-slate-800">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamic Live search bar -->
+            <div class="relative max-w-md">
+                <input type="text" id="catalog-search" oninput="handleCatalogSearch(this.value)" placeholder="Search products by brand, ingredient, or type..." class="w-full bg-cream-50 dark:bg-forest-950 border border-slate-300 dark:border-slate-800 rounded-xl py-2.5 px-4 pl-10 text-xs focus:outline-none focus:border-forest-900">
+                <span class="absolute left-3.5 top-3 text-slate-500">🔍</span>
+            </div>
+
+            <!-- Core Products grid -->
+            <div id="catalog-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+        <!-- ==========================================
+            VIEW 3: BOOK PROS
+        ========================================== -->
+        <section id="view-bookings" class="hidden space-y-8 animate-fadeIn">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <span class="text-[9px] font-black tracking-widest uppercase bg-forest-100 dark:bg-forest-950 text-forest-900 dark:text-cream-100 px-3 py-1 rounded">AURA GO Network</span>
+                <h3 class="text-3xl font-serif font-black text-forest-900 dark:text-cream-100">On-Demand Vetted Stylists</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-xs">Vetted professional wig installers, precision nail artists, and makeup pros right to your location.</p>
+            </div>
+
+            <!-- Scheduled bookings list -->
+            <div id="active-stylist-bookings-list" class="space-y-4 max-w-2xl mx-auto hidden">
+                <h4 class="font-bold text-sm text-[#0D2C22] dark:text-cream-100">📅 Scheduled Beauty Tech Sessions</h4>
+                <div id="bookings-items-container" class="space-y-3"></div>
+            </div>
+
+            <!-- Tech Cards grid -->
+            <div id="stylists-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+        <!-- ==========================================
+            VIEW 4: AI MATCHER & COMPANION
+        ========================================== -->
+        <section id="view-ai" class="hidden max-w-2xl mx-auto space-y-6 animate-fadeIn">
+            <div class="bg-forest-900 rounded-2xl p-6 text-cream-100 border border-forest-950 flex justify-between items-center gap-4 shadow-md">
+                <div class="space-y-1">
+                    <span class="bg-cream-100/10 border border-cream-100/20 text-forest-100 text-[9px] font-black uppercase px-2.5 py-1 rounded">Intelligent Matcher</span>
+                    <h3 class="text-xl font-serif font-bold">AURA Organic Skin Expert</h3>
+                    <p class="text-forest-100/80 text-xs">Dynamic matching tailored to SA climates and official languages!</p>
+                </div>
+                <span class="text-5xl">🌿</span>
+            </div>
+
+            <!-- Chat screen box -->
+            <div class="bg-white dark:bg-forest-950 rounded-2xl border border-slate-200 dark:border-slate-800 h-[450px] flex flex-col justify-between overflow-hidden shadow-sm transition-colors">
+                
+                <!-- Conversation box -->
+                <div id="ai-chat-box" class="p-4 overflow-y-auto space-y-4 flex-grow text-xs leading-relaxed">
+                    <!-- Chats updated dynamically -->
+                </div>
+
+                <!-- Input console -->
+                <div class="p-3 border-t border-slate-100 dark:border-slate-800 bg-cream-50 dark:bg-forest-950 flex items-center gap-2">
+                    <input type="text" id="ai-chat-input" placeholder="Ask about hydration regimes for Johannesburg dry heat..." class="flex-grow bg-white dark:bg-forest-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-cream-100 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-forest-900">
+                    <button onclick="handleAiSubmit()" class="bg-forest-900 hover:bg-forest-800 text-cream-100 font-black text-xs px-4 py-2.5 rounded-xl uppercase tracking-wider">
+                        Ask AI
+                    </button>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="space-y-2">
+                <span class="text-[10px] text-slate-400 font-bold uppercase block tracking-widest">Skincare Quick-Starters:</span>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="fillAiInput('What is the best routine for Gauteng Highveld dry heat?')" class="bg-white dark:bg-forest-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-cream-200 rounded-lg p-2.5 text-[10px] hover:border-forest-900 transition-all text-left">
+                        💡 "What is the best routine for Gauteng Highveld dry heat?"
+                    </button>
+                    <button onclick="fillAiInput('Best affordable dupe for Dior backing glowing primers?')" class="bg-white dark:bg-forest-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-cream-200 rounded-lg p-2.5 text-[10px] hover:border-forest-900 transition-all text-left">
+                        💡 "Best affordable dupe for Dior backing glowing primers?"
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+            VIEW 5: LIVE ORDER TRACKING
+        ========================================== -->
+        <section id="view-tracker" class="hidden max-w-2xl mx-auto space-y-6 animate-fadeIn">
+            <div class="text-center space-y-2">
+                <span class="bg-forest-100 dark:bg-forest-950 text-forest-900 dark:text-cream-100 font-black text-[9px] uppercase px-3 py-1 rounded">Live Logistics Dashboard</span>
+                <h3 class="text-2xl font-serif font-black text-forest-900 dark:text-cream-100">My Aura Deliveries & Bookings</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-xs">Simulated on-the-road tracking updates for active orders placed.</p>
+            </div>
+
+            <div id="active-tracker-card" class="bg-white dark:bg-forest-950 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-6 shadow-sm transition-colors hidden">
+                <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4 flex-wrap gap-3">
+                    <div>
+                        <h4 id="track-id" class="font-bold text-sm text-[#0D2C22] dark:text-cream-100">Order reference: #AUR-XXXXX</h4>
+                        <p id="track-time" class="text-[9px] text-slate-400">Departed at: 12:00</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-400 uppercase font-bold">Total Paid</p>
+                        <p id="track-total" class="text-base font-black text-[#0D2C22] dark:text-cream-100">R 0</p>
+                    </div>
+                </div>
+
+                <!-- Step slider -->
+                <div class="relative pt-6">
+                    <div class="absolute top-10 left-3 right-3 h-1 bg-slate-100 dark:bg-slate-800"></div>
+                    <div id="track-slider-line" class="absolute top-10 left-3 h-1 bg-[#0D2C22] dark:bg-emerald-400 transition-all duration-1000 w-0"></div>
+
+                    <div class="grid grid-cols-4 text-center text-[10px] sm:text-xs gap-2">
+                        <div class="space-y-1">
+                            <span id="track-step-1" class="w-8 h-8 rounded-full border-2 font-black mx-auto flex items-center justify-center bg-white border-slate-200 text-slate-300 dark:bg-forest-900 dark:border-slate-700">1</span>
+                            <p class="font-bold">Assembled</p>
+                        </div>
+                        <div class="space-y-1">
+                            <span id="track-step-2" class="w-8 h-8 rounded-full border-2 font-black mx-auto flex items-center justify-center bg-white border-slate-200 text-slate-300 dark:bg-forest-900 dark:border-slate-700">2</span>
+                            <p class="font-bold">Rider Picked</p>
+                        </div>
+                        <div class="space-y-1">
+                            <span id="track-step-3" class="w-8 h-8 rounded-full border-2 font-black mx-auto flex items-center justify-center bg-white border-slate-200 text-slate-300 dark:bg-forest-900 dark:border-slate-700">3</span>
+                            <p class="font-bold">On the Road</p>
+                        </div>
+                        <div class="space-y-1">
+                            <span id="track-step-4" class="w-8 h-8 rounded-full border-2 font-black mx-auto flex items-center justify-center bg-white border-slate-200 text-slate-300 dark:bg-forest-900 dark:border-slate-700">4</span>
+                            <p class="font-bold">Delivered</p>
+                        </div>
+                      </div>
+                </div>
+
+                <!-- Track particulars -->
+                <div class="bg-cream-100 dark:bg-forest-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                    <h5 class="font-bold text-[#0D2C22] dark:text-cream-100">📍 Shipping Particulars</h5>
+                    <p class="text-slate-600 dark:text-slate-400">Drop-off destination: <strong id="track-dest" class="text-slate-800 dark:text-cream-100">Sandton</strong></p>
+                </div>
+            </div>
+
+            <div id="no-active-tracker" class="bg-white dark:bg-forest-950 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800 max-w-sm mx-auto space-y-3">
+                <span class="text-5xl block">🛵</span>
+                <h4 class="font-bold text-[#0D2C22] dark:text-cream-100">No Active Deliveries</h4>
+                <p class="text-slate-400 text-xs">Fill up your AURA bag and check out to see the delivery tracking simulations.</p>
+                <button onclick="navigateToTab('shop')" class="bg-forest-900 hover:bg-forest-800 text-cream-100 px-4 py-2 rounded-xl text-xs uppercase font-black">Browse Catalogue</button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+            VIEW 6: PARTNER / DRIVER HUB (PARTNER APPS)
+        ========================================== -->
+        <section id="view-partner" class="hidden space-y-8 py-4 animate-fadeIn">
+            <div class="bg-[#0D2C22] text-[#FAF7F2] rounded-3xl p-8 border border-slate-900 shadow-lg flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="space-y-2">
+                    <span class="bg-[#FAF7F2]/10 border border-[#FAF7F2]/20 text-[#D1E2D3] text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                        Partner Portal
+                    </span>
+                    <h3 class="text-3xl font-serif font-bold">AURA Partner & Driver Hub</h3>
+                    <p class="text-[#D1E2D3]/90 text-xs">Simulated Driver Delivery route assignments and Stylist custom calendars.</p>
+                </div>
+                <div class="bg-[#FAF7F2] text-[#0D2C22] p-4 rounded-2xl text-center shadow-md">
+                    <p class="text-[10px] uppercase font-black text-slate-500">Active Balance</p>
+                    <p class="text-2xl font-black text-[#0D2C22]">R 1,420.00</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Scooter assignments list -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-lg text-[#0D2C22] dark:text-cream-100 flex items-center gap-2">
+                        <span>🛵</span> Scooter On-Demand Assignments
+                    </h4>
+                    <div id="driver-assignments-container" class="space-y-4">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+
+                <!-- Stylists calendar list -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-lg text-[#0D2C22] dark:text-cream-100 flex items-center gap-2">
+                        <span>💅🏽</span> Beauty Professional Calendars
+                    </h4>
+                    <div id="stylist-schedules-container" class="space-y-4">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================
+        PRO BOOKING DATES MODAL
+    ========================================== -->
+    <div id="pro-booking-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="w-full max-w-md bg-cream-100 dark:bg-obsidian-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-6">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200/10">
+                <h4 class="font-serif font-black text-lg text-[#0D2C22] dark:text-cream-100">Schedule Appointment</h4>
+                <button onclick="closeProBookingModal()" class="text-slate-500 hover:text-red-900 font-bold text-xs">✕ Cancel</button>
+            </div>
+
+            <form onsubmit="handleStylistBookingSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-700 dark:text-slate-300 font-bold mb-1">Select Service Treatment Package:</label>
+                    <select id="booking-service-select" class="w-full bg-white dark:bg-forest-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-cream-100 rounded-xl p-3 focus:outline-none" required>
+                        <!-- Filled dynamically based on pro -->
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-700 dark:text-slate-300 font-bold mb-1">Select Date:</label>
+                        <input type="date" id="booking-date-input" value="2026-06-01" class="w-full bg-white dark:bg-forest-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-cream-100 rounded-xl p-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 dark:text-slate-300 font-bold mb-1">Select Time:</label>
+                        <input type="time" id="booking-time-input" value="14:00" class="w-full bg-white dark:bg-forest-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-cream-100 rounded-xl p-3" required>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-forest-900/30 p-3 rounded-lg text-[10px] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800">
+                    🌿 Distance shipping charges are completely waivered. Your technician will navigate directly to your coordinates.
+                </div>
+
+                <button type="submit" class="w-full bg-forest-900 hover:bg-forest-800 text-cream-100 font-black uppercase tracking-widest py-3 rounded-xl transition-all">
+                    Confirm Stylist Appointment Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+        INTERACTIVE SHOPPING BAG OVERLAY (BAR)
+    ========================================== -->
+    <div id="shopping-bag-bar" class="fixed bottom-0 left-0 right-0 z-40 bg-forest-900 text-cream-100 p-4 shadow-2xl border-t border-forest-950 transition-all hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🛍️</span>
+                <div>
+                    <h4 class="font-bold text-sm" id="bag-bar-title">Your Aura Shopping Bag</h4>
+                    <p class="text-[11px] text-forest-100" id="bag-bar-subtitle">0 items in bag • Delivery: Sixty60 Express</p>
+                </div>
+            </div>
+
+            <!-- List mini tags of cart items -->
+            <div id="bag-bar-tags" class="hidden lg:flex gap-2"></div>
+
+            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                <div>
+                    <p class="text-[9px] text-forest-100 uppercase font-bold">Subtotal</p>
+                    <p id="bag-bar-subtotal" class="text-lg font-serif font-black">R 0</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="clearShoppingBag()" class="bg-cream-100/10 hover:bg-cream-100/20 border border-cream-100/20 text-cream-100 text-xs font-black uppercase tracking-wider py-2 px-3 rounded-xl transition-all">
+                        Clear Bag
+                    </button>
+                    <button onclick="handlePlaceOrderSubmit()" class="bg-cream-100 hover:bg-cream-200 text-forest-900 text-xs font-black uppercase tracking-wider py-2.5 px-5 rounded-xl transition-all">
+                        Place Delivery Order →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+        AURA PREMIUM FOOTER
+    ========================================== -->
+    <footer class="bg-forest-950 text-cream-100 py-12 px-4 mt-12 border-t border-slate-900 transition-colors">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-xs font-light">
+            <div class="space-y-3">
+                <h4 class="font-serif font-bold text-lg tracking-widest text-forest-100 uppercase">AURA</h4>
+                <p class="text-slate-400 leading-relaxed">Consolidating premium South African cosmetics logistics. Formulated for highveld winters and coastal ocean humidity drops.</p>
+                <p class="text-slate-500 text-[10px]">Active Hubs: JHB, Pretoria East, Sea Point, Durban Umhlanga</p>
+            </div>
+            <div class="space-y-3">
+                <h5 class="font-black text-slate-200 uppercase tracking-widest text-[9px]">Ecosystem Portals</h5>
+                <div class="grid grid-cols-2 gap-2 text-slate-400">
+                    <button onclick="switchAppRole('consumer'); navigateToTab('home')" class="text-left hover:text-white">Home Portal</button>
+                    <button onclick="switchAppRole('consumer'); navigateToTab('shop')" class="text-left hover:text-white">Shop Sixty60</button>
+                    <button onclick="switchAppRole('consumer'); navigateToTab('bookings')" class="text-left hover:text-white">Book Stylist</button>
+                    <button onclick="switchAppRole('partner')" class="text-left hover:text-white">Driver Assigned Gigs</button>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <h5 class="font-black text-slate-200 uppercase tracking-widest text-[9px]">AURA Operations</h5>
+                <p class="text-slate-400">Vetted drivers and cosmetics practitioners can register accounts to verify credentials.</p>
+                <p class="text-[10px] text-slate-500 font-medium">© 2026 AURA Inc. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ==========================================
+        CORE JAVASCRIPT STATE ENGINE & RENDERER
+    ========================================== -->
+    <script>
+        // System Config Data Matches
+        const REGIONS = [
+            { id: 'jhb', name: 'Johannesburg (Sandton, Rosebank, Midrand)' },
+            { id: 'pta', name: 'Pretoria (East, Hatfield, Centurion)' },
+            { id: 'cpt', name: 'Cape Town (Sea Point, Waterfront, Stellies)' },
+            { id: 'dbn', name: 'Durban (Umhlanga, Morningside)' }
+        ];
+
+        const CAMPUSES = [
+            { id: 'wits', name: 'Wits University (Braamfontein Residences, Junction)' },
+            { id: 'up', name: 'University of Pretoria (Hatfield Res, Tuks Village)' },
+            { id: 'uj', name: 'UJ (Auckland Park Kingsway, Sophiatown Res)' },
+            { id: 'unisa', name: 'UNISA Nearby Residences (Sunnyside)' }
+        ];
+
+        const PRODUCTS = [
+            {
+                id: 'p1',
+                name: 'AURA Botanical Hydrating Elixir',
+                category: 'Sixty60 Express',
+                subcat: 'Skincare',
+                price: 640,
+                rating: 4.9,
+                emoji: '🌿',
+                tag: 'Best Seller',
+                desc: 'Intense organic facial oil with native Kalahari melon seed extract. Restores radiance and skin elasticity.'
+            },
+            {
+                id: 'p2',
+                name: 'Estée Lauder Double Wear Foundation SPF 10',
+                category: 'Sixty60 Express',
+                subcat: 'Makeup',
+                price: 795,
+                rating: 4.8,
+                emoji: '✨',
+                tag: 'Trending',
+                desc: '24-hour stay-in-place liquid foundation. Lightweight, oil-controlling, and highly sweat-resistant.'
+            },
+            {
+                id: 'p3',
+                name: 'Fenty Beauty Gloss Bomb Universal Lip Luminizer',
+                category: 'Sixty60 Express',
+                subcat: 'Makeup',
+                price: 480,
+                rating: 4.9,
+                emoji: '💋',
+                tag: 'Rihanna’s Favorite',
+                desc: 'The ultimate stop-everything lip gloss. Delivers explosive shine in shade Fenty Glow.'
+            },
+            {
+                id: 'p4',
+                name: 'Got2B Glued Waterproof Lace Wig Gel',
+                category: 'Campus Run',
+                subcat: 'Wig Essentials',
+                price: 185,
+                rating: 4.9,
+                emoji: '🔥',
+                tag: 'Midnight Emergency',
+                desc: 'Ultimate stronghold hair gel for flawless frontal lace layups. Resists sweat, humidity, and dancefloors.'
+            },
+            {
+                id: 'p5',
+                name: 'Cantu Shea Butter Extra Hold Edge Stay Gel',
+                category: 'Campus Run',
+                subcat: 'Hair Care',
+                price: 130,
+                rating: 4.7,
+                emoji: '🧴',
+                tag: 'Campus Favorite',
+                desc: 'Sleeks and smooths baby hairs with moisturizing pure shea butter. Non-flaking formula.'
+            },
+            {
+                id: 'p6',
+                name: 'Lil-Lets Essentials & Cramp Relief Care Pack',
+                category: 'Campus Run',
+                subcat: 'Emergency Care',
+                price: 95,
+                rating: 5.0,
+                emoji: '🌸',
+                tag: 'Care Package',
+                desc: 'Combines organic super-absorbency pads, soothing self-heating pain relief patches, and chamomile herbal tea.'
+            },
+            {
+                id: 'p7',
+                name: 'COSRX Advanced Snail 96 Mucin Power Essence',
+                category: 'TikTok & K-Beauty',
+                subcat: 'Skincare',
+                price: 410,
+                rating: 4.9,
+                emoji: '🐌',
+                tag: 'TikTok Viral',
+                desc: '96.3% Snail Secretion Filtrate. Protects the skin barrier while creating an otherworldly South African dewy glow.'
+            },
+            {
+                id: 'p8',
+                name: 'Beauty of Joseon Relief Sun : Rice + Probiotics',
+                category: 'TikTok & K-Beauty',
+                subcat: 'Skincare',
+                price: 395,
+                rating: 4.8,
+                emoji: '☀️',
+                tag: 'Holy Grail SPF',
+                desc: 'Organic sunscreen with 30% rice extract. Goes on like a light cream with zero white cast or stickiness.'
+            },
+            {
+                id: 'p9',
+                name: 'E.L.F Halo Glow Liquid Filter (Premium Dupe)',
+                category: 'TikTok & K-Beauty',
+                subcat: 'Makeup',
+                price: 350,
+                rating: 4.7,
+                emoji: '✨',
+                tag: 'Viral Dupe',
+                desc: 'Innovative glow primer-booster. A highly-rated, affordable alternative to high-end luminous glow filters.'
+            }
+        ];
+
+        const BEAUTY_PROS = [
+            {
+                id: 'pro1',
+                name: 'Lerato M.',
+                title: 'Wig Installer & Lace Customizer',
+                rating: 4.9,
+                reviews: 184,
+                price: 600,
+                emoji: '👩🏽‍🦱',
+                bio: 'Specialist in custom flat lace frontals, glueless closures, and frontal maintenance. Based in Sandton/Braamfontein.',
+                services: ['Flawless Lace Frontal Install (R600)', 'Glueless Wig Fitting (R400)', 'Wig Wash & Style Revamp (R350)'],
+                badge: 'AURA Master Certified'
+            },
+            {
+                id: 'pro2',
+                name: 'Zama Z.',
+                title: 'High-Street Glam & Bridal Makeup Artist',
+                rating: 5.0,
+                reviews: 240,
+                price: 800,
+                emoji: '💄',
+                bio: 'Expert in photographic event glam and clean skin textures. Popular for Wits and UP graduation seasons.',
+                services: ['Graduation Full Glam (R800)', 'Bridal Consulting & Look (R1500)', 'Soft Glam Everyday Aesthetic (R550)'],
+                badge: 'Elite Top-Rated'
+            },
+            {
+                id: 'pro3',
+                name: 'Chantel N.',
+                title: 'Acrylic Extension & Nail Art Queen',
+                rating: 4.8,
+                reviews: 112,
+                price: 350,
+                emoji: '💅🏽',
+                bio: 'Mobile nail technician providing luxury spa acrylic overlays, abstract line-work gel art, and soft gel extensions.',
+                services: ['Full Acrylic Sculptured Set with Gel Art (R350)', 'Rubber Base Builder Overlay (R250)', 'AURA Luxury Spa Gel Pedicure (R300)'],
+                badge: 'On-Demand Favorite'
+              }
+        ];
+
+        // System Translation Matches
+        const LOCALES = {
+            en: {
+                welcome: "Welcome to AURA",
+                tagline: "Premium Consumer & Driver Ecosystem",
+                taglineHero: "Crafting clean beauty on-demand across SA",
+                taglineSub: "Seamless Sixty60 style deliveries for premium beauty products, combined with late-night campus support, and on-demand schedules with South Africa's vetted cosmetics artists.",
+                shopSixty60: "Shop Sixty60",
+                campusRun: "Campus Run",
+                bookStylists: "Book Pros",
+                aiMatcher: "AI Matcher",
+                signIn: "Sign In",
+                signUp: "Create Account",
+                signOut: "Log Out",
+                addToBag: "Add to Bag",
+                bag: "Shopping Bag",
+                continueAsGuest: "Continue as Guest",
+                guestNotice: "Browsing in Guest Mode. Sign up or log in to add items to bag or book stylings.",
+                home: "Home",
+                driverHub: "Partner / Driver Hub 🛵",
+                consumerApp: "Consumer App",
+                payout: "Estimated Payout",
+                earnings: "Active Balance",
+                accRequired: "Authentication Required",
+                gateDesc: "Add-to-cart, monthly subscription signups, and vetted beauty tech bookings require authentication.",
+                demoBtn1: "Client Demo Login 💅🏽",
+                demoBtn2: "Driver Demo Login 🛵",
+                activeRiders: "Riders active near you",
+                speedPolicy: "Choose Delivery Speed Policy",
+                deliveryFee: "Delivery Charge",
+                totalPaid: "Total Paid",
+                trackingTitle: "Live Logistics Dashboard",
+                trackingSub: "Simulated on-the-road tracking updates for active orders placed.",
+                step1: "Assembled",
+                step2: "Rider Picked",
+                step3: "On the Road",
+                step4: "Delivered",
+                shippingPart: "Shipping Particulars",
+                noActive: "No Active Deliveries",
+                browseCat: "Browse Catalogue",
+                calendarTitle: "Vetted Local Stylists & Techs"
+            },
+            zu: {
+                welcome: "Siyakwamukela ku-AURA",
+                tagline: "Uhlelo lwe-Premium Beauty ne-Driver",
+                taglineHero: "Ukwenza ubuhle obuhlanzekile ngezikhathi zonke e-SA",
+                taglineSub: "Ukuthunyelwa okusheshayo kwe-Sixty60 kwemikhiqizo yobuhle, kuhlanganiswe nosizo lwasebusuku lwasemfundweni, namahlelo nabaculi abavunyelwe.",
+                shopSixty60: "Thenga u-Sixty60",
+                campusRun: "Ukulethwa Kwasemfundweni",
+                bookStylists: "Bhuka Ochwepheshe",
+                aiMatcher: "Umsizi we-AI",
+                signIn: "Ngena",
+                signUp: "Vula I-Akhawunti",
+                signOut: "Phuma",
+                addToBag: "Faka Obhasikidini",
+                bag: "Ubhasikidi Wokuthenga",
+                continueAsGuest: "Qhubeka njengesivakashi",
+                guestNotice: "Ubuka njengeSivakashi. Kudingeka ungene ngemvume ukuze ukhokhe noma ubhukhe.",
+                home: "Ikhaya",
+                driverHub: "Isizinda Somshayeli / Sabasebenzi 🛵",
+                consumerApp: "Uhlelo Lomthengi",
+                payout: "Inkokhelo Elindelekile",
+                earnings: "Imali Ekhona",
+                accRequired: "Kudingeka Ukungena",
+                gateDesc: "Ukufaka obhasikidini, izikhwama zenyanga, nokubhuka ochwepheshe kudinga ungene ngemvume.",
+                demoBtn1: "Ngena njengeKhasimende 💅🏽",
+                demoBtn2: "Ngena njengoMshayeli 🛵",
+                activeRiders: "Abashayeli bayasebenza eduze nawe",
+                speedPolicy: "Khetha Isivinini Sokulethwa",
+                deliveryFee: "Inkokhelo Yokulethwa",
+                totalPaid: "Inani Elikhokhiwe",
+                trackingTitle: "Ukulandelela Ukuthunyelwa",
+                trackingSub: "Bona ukuthi isikhwama sakho siza nini kuwe ekhaya.",
+                step1: "Kuhlanganisiwe",
+                step2: "Kuthathwe Umshayeli",
+                step3: "Alusemgaqweni",
+                step4: "Lulethiwe",
+                shippingPart: "Imininingwane Yokulethwa",
+                noActive: "Akukho Okulethwayo Okusebenzayo",
+                browseCat: "Bheka Imikhiqizo",
+                calendarTitle: "Abaculi be-Cosmetics Abavunyelwe"
+            },
+            xh: {
+                welcome: "Wamkelekile ku-AURA",
+                tagline: "Inkqubo ye-Premium Beauty kunye ne-Driver",
+                taglineHero: "Ukwenza ubuhle obucocekileyo ngesikhathi sonke e-SA",
+                taglineSub: "Ukuhanjiswa okukhawulezileyo kwe-Sixty60 kwemveliso zobuhle, kunye nenkxaso yasebusuku yekholeji, kunye nababhuki abaqeqeshiweyo.",
+                shopSixty60: "Thenga u-Sixty60",
+                campusRun: "Ukuhanjiswa Kwasekholeji",
+                bookStylists: "Bhukisha i-Stylist",
+                aiMatcher: "Umsizi we-AI",
+                signIn: "Ngena",
+                signUp: "Vula I-Akhawunti",
+                signOut: "Phuma",
+                addToBag: "Faka eBhasikithini",
+                bag: "IBhasikithi Yokuthenga",
+                continueAsGuest: "Qhubeka njengondwendwe",
+                guestNotice: "Ubrawuza njengolwendwendwe. Kufuneka ungene ukwenza intlawulo okanye ubhukishe.",
+                home: "Ikhaya",
+                driverHub: "Iziko Lomqhubi / Lomlingani 🛵",
+                consumerApp: "Inkqubo YoMthengi",
+                payout: "Inkokhelo Elindelekileyo",
+                earnings: "Imali Ekhoyo",
+                accRequired: "Kufuneka uQinisekise",
+                gateDesc: "Ukuze ufake ibhasikithi, okanye ubhukishe i-stylist kufuneka ngenge-akhawunti yakho.",
+                demoBtn1: "Khasimende Demo 💅🏽",
+                demoBtn2: "Mqhubi Demo Login 🛵",
+                activeRiders: "Abakhweli bayasebenza kufutshane nawe",
+                speedPolicy: "Khetha uMgaqo-nkqubo wokuHambisa",
+                deliveryFee: "Inkokhelo yokuhambisa",
+                totalPaid: "Iyonke ehlawulweyo",
+                trackingTitle: "UkuHanjiswa nokuHlola iParp",
+                trackingSub: "Landela i-rider yakho ngexesha lokwenene.",
+                step1: "Ihlanganisiwe",
+                step2: "Ilandwe nguMkhweli",
+                step3: "Ese-ndleleni",
+                step4: "Izisiwe",
+                shippingPart: "Iinkcukacha zokuHambisa",
+                noActive: "Akukho kuhanjiswa kusebenzayo",
+                browseCat: "Khangela ikhathalogu",
+                calendarTitle: "Ii-Stylists ezivunyiweyo zalapha"
+            },
+            af: {
+                welcome: "Welkom by AURA",
+                tagline: "Premium Skoonheid- en Bestuurder-ekosisteem",
+                taglineHero: "Snoei skoon skoonheid op aanvraag in SA",
+                taglineSub: "Naatlose Sixty60-styl aflewerings vir premium skoonheidsprodukte, gekombineer met laatnag-kampusondersteuning en skedules met SA se beste stiliste.",
+                shopSixty60: "Koop Sixty60",
+                campusRun: "Kampus-aflewering",
+                bookStylists: "Bespreek Stiliste",
+                aiMatcher: "AI-Pasmaat",
+                signIn: "Teken In",
+                signUp: "Skep Rekening",
+                signOut: "Teken Uit",
+                addToBag: "Voeg by Sak",
+                bag: "Inkoopiesak",
+                continueAsGuest: "Gaan voort as gas",
+                guestNotice: "U blaai as gas. Aanmelding is nodig om te betaal of te bespreek.",
+                home: "Tuisblad",
+                driverHub: "Bestuurder- en Vennootsentrum 🛵",
+                consumerApp: "Verbruikers-app",
+                payout: "Verwagte Uitbetaling",
+                earnings: "Aktiewe Saldo",
+                accRequired: "Verifikasie Vereis",
+                gateDesc: "Voeg-by-sak en skoonheidsafsprake vereis dat jy aanmeld om sekuriteit te verseker.",
+                demoBtn1: "Kliënt Demo Teken In 💅🏽",
+                demoBtn2: "Bestuurder Demo Teken In 🛵",
+                activeRiders: "Bestuurders aktief naby jou",
+                speedPolicy: "Kies Afleweringspoed",
+                deliveryFee: "Afleweringskoste",
+                totalPaid: "Totaal Betaal",
+                trackingTitle: "Regstreekse Logistiek-paneel",
+                trackingSub: "Volg jou bestelling intyds op pad na jou huis.",
+                step1: "Gepak",
+                step2: "Bestuurder Gekies",
+                step3: "Op die pad",
+                step4: "Afgelewer",
+                shippingPart: "Afleweringsbesonderhede",
+                noActive: "Geen Aktiewe Aflewerings Nie",
+                browseCat: "Blaai deur Katalogus",
+                calendarTitle: "Goedgekeurde Plaaslike Stiliste"
+            }
+        };
+
+        // Fallback placeholders for remaining languages so they don't break the selection list
+        ['nso', 'ts', 'st', 'tsg', 'ss', 'ven', 'nde'].forEach(lang => {
+            LOCALES[lang] = LOCALES.en; // Set default translation fallbacks for complex ones
+        });
+
+        // App Initial States
+        let state = {
+            activeAppRole: 'consumer',
+            activeTab: 'home',
+            currentLanguage: 'en',
+            isDarkMode: false,
+            currentUser: null,
+            pendingAction: null,
+            authFormType: 'login',
+            onboardingRoleSelection: 'consumer',
+
+            // Commerce
+            deliveryType: 'express',
+            selectedRegion: 'jhb',
+            selectedCampus: 'wits',
+            streetAddress: '8 Keyes Avenue, Rosebank',
+            cart: [],
+            orders: [],
+            bookings: [],
+            orderTrackingStep: 0,
+            selectedCategory: 'All',
+            searchQuery: '',
+
+            // Modals
+            selectedPro: null,
+
+            // Simulated driver feeds
+            driverDeliveries: [
+                { id: 'DEL-8842', customerName: 'Naledi K.', destination: 'Wits Junction Residence, Gate 2', items: 'Got2B Lace Wig Glue x1, Cantu Edge Gel x1', payout: 75, status: 'pending', type: 'Campus Run' },
+                { id: 'DEL-9912', customerName: 'Sipho M.', destination: '44 Melrose Boulevard, Melrose Arch', items: 'Fenty Beauty Gloss Bomb x1', payout: 90, status: 'pending', type: 'Sixty60 Express' }
+            ],
+            stylistSchedules: [
+                { id: 'SCH-3012', customerName: 'Thando N.', service: 'Graduation Full Glam (R800)', time: 'Saturday, 10:00 AM', location: 'Hatfield Studios, Pretoria', status: 'upcoming' }
+            ],
+
+            // AI chat system
+            aiChat: [
+                { role: 'assistant', content: "Hello, darling! 🌿 I am your **AURA AI Clean Beauty Companion**. Feel free to browse around! If you need bespoke organic skincare regimes for SA conditions, fast wig-laid remedies, or viral TikTok dupes, just ask me." }
+            ]
+        };
+
+        // ==========================================
+        // DYNAMIC STATE SYSTEM & RENDER ENGINE
+        // ==========================================
+
+        function triggerToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            toast.style.transform = "translateY(0)";
+            toast.style.opacity = "1";
+            setTimeout(() => {
+                toast.style.transform = "translateY(-100px)";
+                toast.style.opacity = "0";
+            }, 3000);
         }
 
-        // Mount and boot up the system onto the webpage DOM targeting root anchor
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        function toggleTheme() {
+            state.isDarkMode = !state.isDarkMode;
+            if (state.isDarkMode) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            const btns = document.querySelectorAll('.theme-btn-text');
+            btns.forEach(btn => btn.innerText = state.isDarkMode ? 'Light' : 'Dark');
+            triggerToast(state.isDarkMode ? "Obsidian Theme Activated 🌙" : "Warm Cream Theme Activated ☀️");
+        }
+
+        function changeLanguage(langCode) {
+            state.currentLanguage = langCode;
+            triggerToast(`Language switched to: ${langCode.toUpperCase()}`);
+            renderTranslations();
+        }
+
+        function renderTranslations() {
+            const t = LOCALES[state.currentLanguage] || LOCALES.en;
+            
+            // Onboarding views labels
+            document.getElementById('gate-hero-title').innerText = t.taglineHero;
+            document.getElementById('gate-hero-desc').innerText = t.taglineSub;
+            document.getElementById('gate-form-title').innerText = t.accRequired;
+            document.getElementById('gate-form-desc').innerText = t.gateDesc;
+            document.getElementById('tab-login-btn').innerText = t.signIn;
+            document.getElementById('tab-signup-btn').innerText = t.signUp;
+            document.getElementById('gate-submit-btn').innerText = t.signIn;
+
+            // App navbar subtitle
+            document.getElementById('header-subtitle').innerText = t.tagline;
+
+            // Restrict strip
+            document.getElementById('guest-alert-msg').innerText = t.guestNotice;
+
+            // Hero and catalog
+            const heroTitle = document.getElementById('hero-title');
+            if (heroTitle) heroTitle.innerText = t.taglineHero;
+            const heroDesc = document.getElementById('hero-desc');
+            if (heroDesc) heroDesc.innerText = t.taglineSub;
+        }
+
+        // Setup drop-down languages
+        function initializeLanguageSelectors() {
+            const selectors = [document.getElementById('gate-lang-selector'), document.getElementById('header-lang-selector')];
+            selectors.forEach(select => {
+                select.innerHTML = '';
+                LANGUAGES.forEach(lang => {
+                    const option = document.createElement('option');
+                    option.value = lang.code;
+                    option.innerText = lang.label;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        // ==========================================
+        // ROUTING / TAB MANAGER
+        // ==========================================
+
+        function navigateToTab(tabId) {
+            state.activeTab = tabId;
+            
+            // Hide all tab views
+            const views = ['view-home', 'view-shop', 'view-bookings', 'view-ai', 'view-tracker', 'view-partner'];
+            views.forEach(v => {
+                const element = document.getElementById(v);
+                if (element) element.classList.add('hidden');
+            });
+
+            // Show selected view
+            const activeViewElement = document.getElementById(`view-${tabId}`);
+            if (activeViewElement) activeViewElement.classList.remove('hidden');
+
+            // Style active buttons
+            const tabButtons = ['home', 'shop', 'bookings', 'ai', 'tracker'];
+            tabButtons.forEach(btnId => {
+                const btn = document.getElementById(`tab-btn-${btnId}`);
+                if (btn) {
+                    if (btnId === tabId) {
+                        btn.className = "px-3 py-2 rounded-lg text-xs font-bold transition-all bg-forest-900 text-cream-100 dark:bg-[#A9CBB7] dark:text-forest-950 shadow-sm";
+                    } else {
+                        btn.className = "px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-cream-100";
+                    }
+                }
+            });
+
+            renderCatalog();
+            renderBookings();
+            renderAiChat();
+            renderTracker();
+        }
+
+        function switchAppRole(role) {
+            if (role === 'partner' && !state.currentUser) {
+                executeProtectedAction(() => {
+                    state.activeAppRole = 'partner';
+                    document.getElementById('consumer-nav-bar').classList.add('hidden');
+                    navigateToTab('partner');
+                    renderPartnerHub();
+                });
+                return;
+            }
+
+            state.activeAppRole = role;
+            const consumerNav = document.getElementById('consumer-nav-bar');
+            
+            if (role === 'consumer') {
+                consumerNav.classList.remove('hidden');
+                document.getElementById('role-switch-consumer').className = "flex-1 md:flex-none px-4 py-1.5 rounded-lg font-black transition-all bg-forest-900 text-cream-100";
+                document.getElementById('role-switch-partner').className = "flex-1 md:flex-none px-4 py-1.5 rounded-lg font-black transition-all text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-cream-100";
+                navigateToTab('home');
+            } else {
+                consumerNav.classList.add('hidden');
+                document.getElementById('role-switch-partner').className = "flex-1 md:flex-none px-4 py-1.5 rounded-lg font-black transition-all bg-forest-900 text-cream-100";
+                document.getElementById('role-switch-consumer').className = "flex-1 md:flex-none px-4 py-1.5 rounded-lg font-black transition-all text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-cream-100";
+                navigateToTab('partner');
+                renderPartnerHub();
+            }
+        }
+
+        // ==========================================
+        // SECURITY / AUTH MANAGER (GUEST CHECKS)
+        // ==========================================
+
+        function executeProtectedAction(actionCallback) {
+            if (!state.currentUser) {
+                state.pendingAction = actionCallback;
+                document.getElementById('gate-screen').classList.remove('hidden');
+                triggerToast("Authentication required to execute action. 🌿");
+            } else {
+                actionCallback();
+            }
+        }
+
+        function continueAsGuest() {
+            document.getElementById('gate-screen').classList.add('hidden');
+            document.getElementById('guest-alert-strip').classList.remove('hidden');
+            triggerToast("Browsing AURA as Guest. 🌿");
+        }
+
+        function openAuthModal() {
+            document.getElementById('gate-screen').classList.remove('hidden');
+        }
+
+        function switchAuthTab(type) {
+            state.authFormType = type;
+            const nameField = document.getElementById('signup-field-name');
+            const submitBtn = document.getElementById('gate-submit-btn');
+            const loginBtn = document.getElementById('tab-login-btn');
+            const signupBtn = document.getElementById('tab-signup-btn');
+
+            if (type === 'login') {
+                nameField.classList.add('hidden');
+                submitBtn.innerText = "Access Ecosystem";
+                loginBtn.className = "flex-1 pb-2 font-black uppercase tracking-wider text-forest-900 border-b-2 border-forest-900";
+                signupBtn.className = "flex-1 pb-2 font-black uppercase tracking-wider text-slate-400";
+            } else {
+                nameField.classList.remove('hidden');
+                submitBtn.innerText = "Initialize Account";
+                signupBtn.className = "flex-1 pb-2 font-black uppercase tracking-wider text-forest-900 border-b-2 border-forest-900";
+                loginBtn.className = "flex-1 pb-2 font-black uppercase tracking-wider text-slate-400";
+            }
+        }
+
+        function simulateAuthPreset(role) {
+            const mockUser = role === 'consumer' 
+                ? { name: 'Thandiswa', email: 'thandiswa@aura.co.za', role: 'consumer' }
+                : { name: 'Driver Musa', email: 'musa.rider@aura.co.za', role: 'partner' };
+
+            state.currentUser = mockUser;
+            document.getElementById('gate-screen').classList.add('hidden');
+            document.getElementById('guest-alert-strip').classList.add('hidden');
+            renderUserAuthStatus();
+
+            triggerToast(`Successfully authenticated as ${mockUser.name}! ✨`);
+
+            if (state.pendingAction) {
+                state.pendingAction();
+                state.pendingAction = null;
+            } else if (role === 'partner') {
+                switchAppRole('partner');
+            }
+        }
+
+        function handleAuthGateSubmit(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('auth-input-name').value;
+            const emailInput = document.getElementById('auth-input-email').value;
+
+            const profile = {
+                name: state.authFormType === 'signup' ? nameInput : emailInput.split('@')[0],
+                email: emailInput,
+                role: state.onboardingRoleSelection
+            };
+
+            state.currentUser = profile;
+            document.getElementById('gate-screen').classList.add('hidden');
+            document.getElementById('guest-alert-strip').classList.add('hidden');
+            renderUserAuthStatus();
+
+            triggerToast(`Welcome to AURA, ${profile.name}! ✨`);
+
+            if (state.pendingAction) {
+                state.pendingAction();
+                state.pendingAction = null;
+            } else if (profile.role === 'partner') {
+                switchAppRole('partner');
+            }
+        }
+
+        function selectOnboardingRole(role) {
+            state.onboardingRoleSelection = role;
+            const clientBtn = document.getElementById('role-client-btn');
+            const driverBtn = document.getElementById('role-driver-btn');
+
+            if (role === 'consumer') {
+                clientBtn.className = "p-2.5 rounded-xl border font-semibold text-center transition-all border-forest-900 bg-forest-100 text-forest-900";
+                driverBtn.className = "p-2.5 rounded-xl border font-semibold text-center transition-all border-slate-300 text-slate-500";
+            } else {
+                driverBtn.className = "p-2.5 rounded-xl border font-semibold text-center transition-all border-forest-900 bg-forest-100 text-forest-900";
+                clientBtn.className = "p-2.5 rounded-xl border font-semibold text-center transition-all border-slate-300 text-slate-500";
+            }
+        }
+
+        function renderUserAuthStatus() {
+            const authBlock = document.getElementById('header-auth-block');
+            if (state.currentUser) {
+                authBlock.innerHTML = `
+                    <div class="flex items-center gap-3 bg-cream-200 dark:bg-forest-950 p-1.5 pl-3 rounded-xl border border-slate-200 dark:border-slate-800 transition-colors">
+                        <div class="text-left text-xs">
+                            <p class="font-black text-forest-900 dark:text-cream-100">${state.currentUser.name}</p>
+                            <p class="text-[9px] text-slate-500 capitalize">${state.currentUser.role} Account</p>
+                        </div>
+                        <button onclick="signOutEcosystem()" class="bg-forest-900 text-cream-100 font-semibold text-[10px] px-2.5 py-1.5 rounded-lg uppercase hover:bg-red-900 transition-all">
+                            Sign Out
+                        </button>
+                    </div>
+                `;
+            } else {
+                authBlock.innerHTML = `
+                    <button onclick="openAuthModal()" class="bg-forest-900 hover:bg-forest-800 text-cream-100 font-black text-xs px-4 py-2.5 rounded-xl uppercase tracking-widest transition-all">
+                        Sign In
+                    </button>
+                `;
+            }
+        }
+
+        function signOutEcosystem() {
+            state.currentUser = null;
+            state.cart = [];
+            state.orders = [];
+            state.bookings = [];
+            renderUserAuthStatus();
+            renderShoppingBag();
+            document.getElementById('guest-alert-strip').classList.remove('hidden');
+            triggerToast("Signed out of AURA.");
+            switchAppRole('consumer');
+            navigateToTab('home');
+        }
+
+        // ==========================================
+        // RETAIL & CATALOG LOGIC
+        // ==========================================
+
+        function addToBag(productId) {
+            executeProtectedAction(() => {
+                const product = PRODUCTS.find(p => p.id === productId);
+                if (!product) return;
+
+                const existing = state.cart.find(item => item.id === productId);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    state.cart.push({ ...product, quantity: 1 });
+                }
+
+                triggerToast(`Added ${product.name} to Aura Bag! 🛍️`);
+                renderShoppingBag();
+            });
+        }
+
+        function changeCartQty(productId, amount) {
+            const itemIndex = state.cart.findIndex(i => i.id === productId);
+            if (itemIndex > -1) {
+                state.cart[itemIndex].quantity += amount;
+                if (state.cart[itemIndex].quantity <= 0) {
+                    state.cart.splice(itemIndex, 1);
+                }
+                renderShoppingBag();
+            }
+        }
+
+        function clearShoppingBag() {
+            state.cart = [];
+            renderShoppingBag();
+            triggerToast("Shopping bag cleared.");
+        }
+
+        function renderShoppingBag() {
+            const bagBar = document.getElementById('shopping-bag-bar');
+            if (state.cart.length === 0) {
+                bagBar.classList.add('hidden');
+                return;
+            }
+
+            bagBar.classList.remove('hidden');
+            const totalQty = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            document.getElementById('bag-bar-subtitle').innerText = `${totalQty} items in bag • Delivery Mode: ${state.deliveryType === 'express' ? '60-Min Express' : 'Campus Emergency Run'}`;
+            document.getElementById('bag-bar-subtotal').innerText = `R ${cartTotal()}`;
+
+            // Mini Visual Tags
+            const tagsContainer = document.getElementById('bag-bar-tags');
+            tagsContainer.innerHTML = '';
+            state.cart.forEach(item => {
+                const tag = document.createElement('span');
+                tag.className = "bg-cream-100/10 border border-cream-100/10 text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1";
+                tag.innerHTML = `
+                    <span>${item.emoji}</span>
+                    <span>${item.name}</span>
+                    <strong class="text-emerald-400">x${item.quantity}</strong>
+                    <button onclick="changeCartQty('${item.id}', -1)" class="ml-1 text-red-400 hover:text-white"><i class="fa-solid fa-minus"></i></button>
+                    <button onclick="changeCartQty('${item.id}', 1)" class="text-emerald-400 hover:text-white"><i class="fa-solid fa-plus"></i></button>
+                `;
+                tagsContainer.appendChild(tag);
+            });
+        }
+
+        function cartTotal() {
+            return state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+
+        function toggleDeliveryType(type) {
+            state.deliveryType = type;
+            const btnExpress = document.getElementById('delivery-toggle-express');
+            const btnCampus = document.getElementById('delivery-toggle-campus');
+            const inputsExpress = document.getElementById('delivery-inputs-express');
+            const inputsCampus = document.getElementById('delivery-inputs-campus');
+
+            if (type === 'express') {
+                btnExpress.className = "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-forest-900 text-cream-100 border-forest-900";
+                btnCampus.className = "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-500 border-slate-200";
+                inputsExpress.classList.remove('hidden');
+                inputsCampus.classList.add('hidden');
+            } else {
+                btnCampus.className = "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-forest-900 text-cream-100 border-forest-900";
+                btnExpress.className = "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-500 border-slate-200";
+                inputsCampus.classList.remove('hidden');
+                inputsExpress.classList.add('hidden');
+            }
+            renderShoppingBag();
+        }
+
+        function activateCampusRun() {
+            toggleDeliveryType('campus');
+            selectCategory('Campus Run');
+            navigateToTab('shop');
+        }
+
+        function selectCategory(cat) {
+            state.selectedCategory = cat;
+            renderCategoriesFilter();
+            renderCatalog();
+        }
+
+        function handleCatalogSearch(query) {
+            state.searchQuery = query;
+            renderCatalog();
+        }
+
+        function handlePlaceOrderSubmit() {
+            if (state.cart.length === 0) return;
+
+            executeProtectedAction(() => {
+                const deliveryFee = state.deliveryType === 'campus' ? 20 : 45;
+                const grandTotal = cartTotal() + deliveryFee;
+                const targetAddress = state.deliveryType === 'campus' 
+                    ? CAMPUSES.find(c => c.id === state.selectedCampus)?.name 
+                    : `${document.getElementById('street-address').value}, ${REGIONS.find(r => r.id === state.selectedRegion)?.name}`;
+
+                const newOrder = {
+                    id: `AUR-${Math.floor(10000 + Math.random() * 90000)}`,
+                    items: [...state.cart],
+                    subtotal: cartTotal(),
+                    deliveryFee,
+                    total: grandTotal,
+                    address: targetAddress,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    status: 'Order Confirmed',
+                    deliveryType: state.deliveryType
+                };
+
+                // Add assignment to driver pool simulator
+                const newDriverJob = {
+                    id: `DEL-${Math.floor(1000 + Math.random() * 9000)}`,
+                    customerName: state.currentUser?.name || 'AURA Client',
+                    destination: targetAddress,
+                    items: state.cart.map(i => `${i.name} x${i.quantity}`).join(', '),
+                    payout: Math.floor(deliveryFee * 0.85 + 25),
+                    status: 'pending',
+                    type: state.deliveryType === 'campus' ? 'Campus Run' : 'Sixty60 Express'
+                };
+
+                state.driverDeliveries.unshift(newDriverJob);
+                state.orders.unshift(newOrder);
+                state.cart = [];
+                state.orderTrackingStep = 1;
+
+                triggerToast(`Order ${newOrder.id} successfully placed! 🛵`);
+                navigateToTab('tracker');
+                renderShoppingBag();
+            });
+        }
+
+        // ==========================================
+        // BEAUTY STYLIST SCHEDULING (AURA GO)
+        // ==========================================
+
+        function openProBookingModal(proId) {
+            const pro = BEAUTY_PROS.find(p => p.id === proId);
+            if (!pro) return;
+
+            state.selectedPro = pro;
+            
+            // Populate select box service treatment list
+            const select = document.getElementById('booking-service-select');
+            select.innerHTML = '';
+            pro.services.forEach(srv => {
+                const opt = document.createElement('option');
+                opt.value = srv;
+                opt.innerText = srv;
+                select.appendChild(opt);
+            });
+
+            document.getElementById('pro-booking-modal').classList.remove('hidden');
+        }
+
+        function closeProBookingModal() {
+            document.getElementById('pro-booking-modal').classList.add('hidden');
+            state.selectedPro = null;
+        }
+
+        function handleStylistBookingSubmit(e) {
+            e.preventDefault();
+            if (!state.selectedPro) return;
+
+            executeProtectedAction(() => {
+                const service = document.getElementById('booking-service-select').value;
+                const bDate = document.getElementById('booking-date-input').value;
+                const bTime = document.getElementById('booking-time-input').value;
+                const targetAddress = state.deliveryType === 'campus' 
+                    ? CAMPUSES.find(c => c.id === state.selectedCampus)?.name 
+                    : `${document.getElementById('street-address').value}, ${REGIONS.find(r => r.id === state.selectedRegion)?.name}`;
+
+                const newBooking = {
+                    id: `BOK-${Math.floor(10000 + Math.random() * 90000)}`,
+                    pro: state.selectedPro,
+                    service,
+                    date: bDate,
+                    time: bTime,
+                    status: 'Confirmed & Stylist Traveling',
+                    address: targetAddress
+                };
+
+                const newScheduleJob = {
+                    id: `SCH-${Math.floor(1000 + Math.random() * 9000)}`,
+                    customerName: state.currentUser?.name || 'AURA Client',
+                    service,
+                    time: `${bDate} at ${bTime}`,
+                    location: targetAddress,
+                    status: 'upcoming'
+                };
+
+                state.stylistSchedules.unshift(newScheduleJob);
+                state.bookings.unshift(newBooking);
+                
+                closeProBookingModal();
+                triggerToast(`Session confirmed with ${state.selectedPro.name}! 📅`);
+                navigateToTab('tracker');
+            });
+        }
+
+        // ==========================================
+        // RENDERING DOM ELEMENTS
+        // ==========================================
+
+        function renderCategoriesFilter() {
+            const list = document.getElementById('categories-filter-list');
+            if (!list) return;
+
+            list.innerHTML = '';
+            ['All', 'Sixty60 Express', 'Campus Run', 'TikTok & K-Beauty'].forEach(cat => {
+                const btn = document.createElement('button');
+                btn.onclick = () => selectCategory(cat);
+                if (state.selectedCategory === cat) {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider border bg-forest-900 border-forest-900 text-white";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider border bg-white border-slate-200 text-slate-500 hover:text-slate-800 dark:bg-forest-950 dark:border-slate-800 dark:text-cream-200";
+                }
+                btn.innerText = cat;
+                list.appendChild(btn);
+            });
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-products-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            
+            // Filter products
+            const filtered = PRODUCTS.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) || 
+                                      p.desc.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                                      p.subcat.toLowerCase().includes(state.searchQuery.toLowerCase());
+                const matchesCategory = state.selectedCategory === 'All' || p.category === state.selectedCategory;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-400">
+                        <p class="text-4xl mb-2">🧐</p>
+                        <p class="text-sm font-bold">No products match your search query.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-forest-950 rounded-2xl border border-slate-200 dark:border-slate-800/80 p-5 flex flex-col justify-between hover:border-forest-900 dark:hover:border-emerald-400 transition-all group shadow-sm";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative bg-cream-100 dark:bg-forest-900 rounded-xl h-44 flex items-center justify-center text-6xl mb-4 group-hover:scale-[1.02] transition-all">
+                            ${p.emoji}
+                            <span class="absolute top-2.5 left-2.5 bg-forest-900 text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded">
+                                ${p.category}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-sm text-[#0D2C22] dark:text-cream-100 mb-1">${p.name}</h4>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">${p.subcat}</span>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs mt-2 mb-4 line-clamp-3">${p.desc}</p>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                        <span class="text-lg font-serif font-black text-forest-900 dark:text-cream-100">R ${p.price}</span>
+                        <button onclick="addToBag('${p.id}')" class="bg-forest-900 hover:bg-forest-800 text-[#FAF7F2] text-xs font-black py-2.5 px-4 rounded-xl transition-all shadow-sm">
+                            Add to Bag 🛍️
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderFeaturedProducts() {
+            const grid = document.getElementById('featured-products-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            const featured = PRODUCTS.filter(p => p.category === 'TikTok & K-Beauty').slice(0, 3);
+            
+            featured.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-forest-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col justify-between group shadow-sm transition-all";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative bg-cream-100 dark:bg-forest-900 rounded-xl h-44 flex items-center justify-center text-6xl mb-4 group-hover:scale-[1.02] transition-all">
+                            ${p.emoji}
+                            <span class="absolute top-2.5 left-2.5 bg-forest-900 text-white text-[9px] font-black tracking-widest px-2.5 py-1 rounded">
+                                ${p.tag}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-sm text-[#0D2C22] dark:text-cream-100 mb-1">${p.name}</h4>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">${p.subcat}</span>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs mt-2 mb-4 line-clamp-3">${p.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                        <span class="text-lg font-serif font-black text-[#0D2C22] dark:text-cream-100">R ${p.price}</span>
+                        <button onclick="addToBag('${p.id}')" class="bg-forest-900 hover:bg-forest-800 text-[#FAF7F2] text-xs font-black py-2 px-3 rounded-lg transition-all">
+                            Add to Bag
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderVettedPros() {
+            // Home page small pro list
+            const grid = document.getElementById('featured-pros-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            BEAUTY_PROS.slice(0, 2).forEach(pro => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-forest-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col sm:flex-row gap-5 shadow-sm";
+                card.innerHTML = `
+                    <div class="bg-cream-100 dark:bg-forest-900 rounded-xl w-full sm:w-24 h-24 flex items-center justify-center text-4xl shrink-0">
+                        ${pro.emoji}
+                    </div>
+                    <div class="space-y-2 flex-grow">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h4 class="font-bold text-sm text-[#0D2C22] dark:text-cream-100">${pro.name}</h4>
+                            <span class="bg-cream-100 dark:bg-forest-900 border border-slate-200 dark:border-slate-800 text-forest-900 dark:text-cream-200 text-[8px] font-black px-2 py-0.5 rounded uppercase">
+                                ${pro.badge}
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">${pro.bio}</p>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-slate-400 text-xs">⭐ ${pro.rating} (${pro.reviews} reviews)</span>
+                            <button onclick="openProBookingModal('${pro.id}')" class="bg-forest-900 text-[#FAF7F2] font-black text-xs py-1.5 px-3 rounded-lg hover:bg-forest-800 transition-all">
+                                Book R${pro.price}+
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderBookings() {
+            // Bookings tab pro list
+            const grid = document.getElementById('stylists-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            BEAUTY_PROS.forEach(pro => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-forest-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col justify-between shadow-sm transition-colors";
+                
+                let treatments = '';
+                pro.services.forEach(s => {
+                    treatments += `
+                        <div class="flex items-center gap-1.5 text-[11px] text-[#0D2C22] dark:text-cream-200">
+                            <span>✔</span> <span>${s}</span>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-4xl bg-cream-100 dark:bg-forest-900 w-12 h-12 rounded-xl flex items-center justify-center">${pro.emoji}</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-forest-900 dark:text-cream-100">${pro.name}</h4>
+                                <p class="text-xs text-slate-400 font-medium">${pro.title}</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${pro.bio}</p>
+
+                        <div class="bg-cream-100 dark:bg-forest-900/40 p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-1.5">
+                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Available Treatments:</span>
+                            ${treatments}
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 mt-4">
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase font-black">Base Appointment Rate</p>
+                            <p class="text-base font-serif font-black text-forest-900 dark:text-cream-100">R ${pro.price}</p>
+                        </div>
+                        <button onclick="openProBookingModal('${pro.id}')" class="bg-[#0D2C22] text-white font-black text-xs py-2 px-4 rounded-xl hover:bg-forest-800">
+                            Book Now 💅🏽
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Update user bookings list if any
+            const activeBookingsContainer = document.getElementById('active-stylist-bookings-list');
+            const itemsContainer = document.getElementById('bookings-items-container');
+
+            if (state.bookings.length > 0) {
+                activeBookingsContainer.classList.remove('hidden');
+                itemsContainer.innerHTML = '';
+                state.bookings.forEach(b => {
+                    const box = document.createElement('div');
+                    box.className = "bg-white dark:bg-forest-950 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-colors";
+                    box.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-4xl bg-cream-100 dark:bg-forest-900 w-12 h-12 rounded-xl flex items-center justify-center">${b.pro.emoji}</span>
+                            <div>
+                                <h5 class="font-bold text-sm text-forest-900 dark:text-cream-100">${b.service}</h5>
+                                <p class="text-xs text-slate-500">Stylist: ${b.pro.name} • Scheduled: ${b.date} at ${b.time}</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="bg-forest-100 border border-forest-900/10 text-[#0D2C22] font-black text-[9px] uppercase px-3 py-1 rounded-full">
+                                ${b.status}
+                            </span>
+                        </div>
+                    `;
+                    itemsContainer.appendChild(box);
+                });
+            } else {
+                activeBookingsContainer.classList.add('hidden');
+            }
+        }
+
+        function renderAiChat() {
+            const chatBox = document.getElementById('ai-chat-box');
+            if (!chatBox) return;
+
+            chatBox.innerHTML = '';
+            state.aiChat.forEach(msg => {
+                const align = msg.role === 'user' ? 'justify-end' : 'justify-start';
+                const style = msg.role === 'user' 
+                    ? 'bg-forest-900 text-cream-100 border-forest-950 rounded-tr-none' 
+                    : 'bg-cream-100 border-slate-200 text-slate-900 dark:bg-forest-900 dark:border-slate-800 dark:text-cream-100 rounded-tl-none';
+                const name = msg.role === 'user' ? 'You' : 'Aura Clean Consultant 👑';
+
+                const block = document.createElement('div');
+                block.className = `flex ${align}`;
+                block.innerHTML = `
+                    <div class="max-w-[85%] rounded-2xl p-4 border ${style}">
+                        <p class="text-[9px] font-black uppercase tracking-widest opacity-60 mb-1">${name}</p>
+                        <p class="whitespace-pre-wrap">${msg.content}</p>
+                    </div>
+                `;
+                chatBox.appendChild(block);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function fillAiInput(text) {
+            document.getElementById('ai-chat-input').value = text;
+            triggerToast("Prompt pre-selected!");
+        }
+
+        async function handleAiSubmit() {
+            const input = document.getElementById('ai-chat-input');
+            const value = input.value.trim();
+            if (!value) return;
+
+            state.aiChat.push({ role: 'user', content: value });
+            input.value = '';
+            renderAiChat();
+
+            // Simulate loader block
+            state.aiChat.push({ role: 'assistant', content: 'Formulating botanical matches... 🌿' });
+            renderAiChat();
+
+            // Perform Mock Gemini API Fetching after 1.5 seconds delay
+            setTimeout(() => {
+                // Remove simulated loader
+                state.aiChat.pop();
+
+                const answer = `
+### Bespoke Wellness Recommendation ✨
+The highveld climate of Gauteng can leave your skin barrier completely stripped, while coastal Durban ocean winds require moisture balance. Here is a curated regimen:
+
+1. **Moisture Sealing Treatment**: Use our **AURA Botanical Hydrating Elixir** (R640). This cold-pressed Kalahari Melon seed formulation replenishes without clogging.
+2. **Double Protection SPF**: Finish off with **Beauty of Joseon Sunscreen SPF50+** (R395) for organic UVA/UVB shield protection without white cast.
+3. **Late-Night Edge Support**: Readying for an early graduation or res party? Lay down frontals using **Got2B Lace Wig Gel** from our local Campus Run delivery.
+
+Let me know if you would like me to help with any further recommendations! 🌿`;
+
+                state.aiChat.push({ role: 'assistant', content: answer });
+                renderAiChat();
+            }, 1500);
+        }
+
+        function renderTracker() {
+            const activeCard = document.getElementById('active-tracker-card');
+            const noActive = document.getElementById('no-active-tracker');
+
+            if (state.orders.length > 0) {
+                noActive.classList.add('hidden');
+                activeCard.classList.remove('hidden');
+
+                const latest = state.orders[0];
+                document.getElementById('track-id').innerText = `Order reference: #${latest.id}`;
+                document.getElementById('track-time').innerText = `Departed at: ${latest.time} • Mode: ${latest.deliveryType === 'campus' ? 'Midnight Campus run' : 'Sixty60 Express'}`;
+                document.getElementById('track-total').innerText = `R ${latest.total}`;
+                document.getElementById('track-dest').innerText = latest.address;
+
+                // Adjust step highlights
+                const stepLine = document.getElementById('track-slider-line');
+                stepLine.style.width = `${(state.orderTrackingStep / 4) * 100}%`;
+
+                for (let i = 1; i <= 4; i++) {
+                    const span = document.getElementById(`track-step-${i}`);
+                    if (state.orderTrackingStep >= i) {
+                        span.className = "w-8 h-8 rounded-full border-2 font-black mx-auto flex items-center justify-center bg-forest-900 border-forest-900 text-white";
+                    } else {
+                        span.className = "w-8 h-8 rounded-full border-2 font-black mx-auto flex items-center justify-center bg-white border-slate-200 text-slate-300 dark:bg-forest-900 dark:border-slate-700";
+                    }
+                }
+
+                // Increment state over time (simulated tracking loop)
+                if (state.orderTrackingStep > 0 && state.orderTrackingStep < 4) {
+                    setTimeout(() => {
+                        state.orderTrackingStep += 1;
+                        renderTracker();
+                    }, 12000); // Step auto updates every 12 seconds
+                }
+            } else {
+                activeCard.classList.add('hidden');
+                noActive.classList.remove('hidden');
+            }
+        }
+
+        // ==========================================
+        // PARTNER PORTAL / DRIVER MANAGEMENT
+        // ==========================================
+
+        function renderPartnerHub() {
+            const assignmentsContainer = document.getElementById('driver-assignments-container');
+            const schedulesContainer = document.getElementById('stylist-schedules-container');
+
+            // 1. Render Driver Deliveries
+            assignmentsContainer.innerHTML = '';
+            state.driverDeliveries.forEach(del => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-forest-950 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm transition-colors";
+                
+                let actionBtn = '';
+                if (del.status === 'pending') {
+                    actionBtn = `
+                        <button onclick="updateDriverJobStatus('${del.id}', 'accepted')" class="bg-forest-900 hover:bg-forest-800 text-cream-100 text-xs font-black uppercase tracking-wider py-2 px-4 rounded-xl transition-all">
+                            Accept Assignment 🛵
+                        </button>
+                    `;
+                } else if (del.status === 'accepted') {
+                    actionBtn = `
+                        <button onclick="updateDriverJobStatus('${del.id}', 'completed')" class="bg-emerald-700 hover:bg-emerald-600 text-cream-100 text-xs font-black uppercase tracking-wider py-2 px-4 rounded-xl transition-all">
+                            Mark Completed ✔
+                        </button>
+                    `;
+                } else {
+                    actionBtn = `
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded">
+                            Completed & Credited
+                        </span>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[9px] font-black tracking-widest uppercase bg-cream-200 dark:bg-forest-900 text-slate-600 dark:text-cream-200 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
+                                ${del.type}
+                            </span>
+                            <h5 class="font-bold text-sm text-forest-900 dark:text-cream-100 mt-1">Client: ${del.customerName}</h5>
+                            <p class="text-xs text-slate-500 mt-1">Destination: ${del.destination}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Estimated payout</p>
+                            <p class="text-sm font-black text-forest-900 dark:text-cream-100">R ${del.payout}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-cream-100 dark:bg-forest-900/30 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
+                        <span class="text-slate-400 font-bold uppercase text-[9px] block">Items in Shipment:</span>
+                        <p class="font-semibold text-slate-700 dark:text-cream-100">${del.items}</p>
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                        ${actionBtn}
+                    </div>
+                `;
+                assignmentsContainer.appendChild(card);
+            });
+
+            // 2. Render Stylist Calendars
+            schedulesContainer.innerHTML = '';
+            state.stylistSchedules.forEach(sch => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-forest-950 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm transition-colors";
+                
+                let completeBtn = '';
+                if (sch.status === 'upcoming') {
+                    completeBtn = `
+                        <button onclick="updateStylistJobStatus('${sch.id}', 'completed')" class="bg-forest-900 hover:bg-forest-800 text-cream-100 text-xs font-black uppercase tracking-wider py-2 px-4 rounded-xl transition-all">
+                            Mark Completed ✔
+                        </button>
+                    `;
+                } else {
+                    completeBtn = `
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded">
+                            Completed & Closed
+                        </span>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h5 class="font-bold text-sm text-forest-900 dark:text-cream-100">${sch.service}</h5>
+                            <p class="text-xs text-slate-500 mt-1">Client Name: ${sch.customerName}</p>
+                            <p class="text-xs text-slate-400">Scheduled: ${sch.time}</p>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-black tracking-widest uppercase px-2.5 py-0.5 rounded bg-forest-100 dark:bg-forest-900 text-[#0D2C22] dark:text-cream-200 border border-slate-200 dark:border-slate-800">
+                                ${sch.status}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="bg-cream-100 dark:bg-forest-900/30 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
+                        <span class="text-slate-400 font-bold uppercase text-[9px] block">Travel Destination:</span>
+                        <p class="font-medium text-slate-700 dark:text-cream-100">${sch.location}</p>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        ${completeBtn}
+                    </div>
+                `;
+                schedulesContainer.appendChild(card);
+            });
+        }
+
+        function updateDriverJobStatus(jobId, status) {
+            const job = state.driverDeliveries.find(d => d.id === jobId);
+            if (job) {
+                job.status = status;
+                triggerToast(`Job status successfully marked as: ${status.toUpperCase()} 🛵`);
+                renderPartnerHub();
+            }
+        }
+
+        function updateStylistJobStatus(schId, status) {
+            const sch = state.stylistSchedules.find(s => s.id === schId);
+            if (sch) {
+                sch.status = status;
+                triggerToast(`Stylist appointment successfully marked as: ${status.toUpperCase()} 💅🏽`);
+                renderPartnerHub();
+            }
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+
+        window.onload = function() {
+            initializeLanguageSelectors();
+            renderTranslations();
+            renderUserAuthStatus();
+            
+            // Populating delivery region selects
+            const regionSelect = document.getElementById('selected-region');
+            REGIONS.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.id;
+                opt.innerText = r.name;
+                regionSelect.appendChild(opt);
+            });
+
+            const campusSelect = document.getElementById('selected-campus');
+            CAMPUSES.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = c.name;
+                campusSelect.appendChild(opt);
+            });
+
+            // Initial catalog render
+            renderFeaturedProducts();
+            renderVettedPros();
+            navigateToTab('home');
+        }
     </script>
 </body>
 </html>
