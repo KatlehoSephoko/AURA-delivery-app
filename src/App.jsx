@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 // Supabase Configuration (Pulling from environment variables with safe fallbacks)
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || "[https://app.supabase.com/project/Xbmsintymlbuqqsxwdvs](https://app.supabase.com/project/Xbmsintymlbuqqsxwdvs)"; 
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || "https://Xbmsintymlbuqqsxwdvs.supabase.co"; 
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
